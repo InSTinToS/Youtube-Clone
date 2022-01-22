@@ -15,17 +15,36 @@ export const UserTools = styled.div`
   align-items: center;
   justify-content: center;
 
-  margin-right: 16px;
-
   svg {
-    margin: 0 8px;
-    width: 24px;
+    display: none;
+  }
+
+  #menu {
+    display: block;
   }
 
   #avatar {
     width: 32px;
     margin: 0 14px;
     border-radius: 50%;
+  }
+
+  @media screen and (min-width: 520px) {
+    svg {
+      display: block;
+
+      margin: 0 8px;
+      width: 24px;
+    }
+  }
+
+  @media screen and (min-width: 750px) {
+    svg {
+      :first-child,
+      :nth-child(2) {
+        display: none;
+      }
+    }
   }
 `
 
@@ -55,11 +74,6 @@ export const SearchButton = styled.button`
   height: 40px;
 
   background-color: ${({ theme }) => theme.colors.quaternary};
-
-  img {
-    width: 24px;
-    height: 24px;
-  }
 `
 
 export const InputWrapper = styled.div`
@@ -68,8 +82,8 @@ export const InputWrapper = styled.div`
   display: flex;
   align-items: center;
 
-  width: clamp(100px, 40vw, 572px);
   height: 40px;
+  width: min(30vw, 572px);
 
   border: 1px solid ${({ theme }) => theme.colors.quaternary};
   background-color: ${({ theme }) => theme.colors.senary};
@@ -98,14 +112,14 @@ export const InputWrapper = styled.div`
 export const Search = styled.div`
   display: none;
 
-  @media screen and (min-width: 700px) {
+  @media screen and (min-width: 750px) {
     display: flex;
   }
 `
 
 export const Youtube = styled(YoutubeIcon)`
-  height: 20px;
   width: 90px;
+  height: 20px;
 `
 
 export const Hamburger = styled(HamburgerIcon)`
@@ -119,13 +133,14 @@ export const SidebarHeader = styled.div`
 
 export const Container = styled.nav`
   position: fixed;
-  top: 0px;
+  top: 0;
+  left: 0;
+  right: 0;
 
   display: flex;
   align-items: center;
   justify-content: space-between;
 
-  width: 100vw;
   height: 56px;
 
   background-color: ${({ theme }) => theme.colors.quinary};

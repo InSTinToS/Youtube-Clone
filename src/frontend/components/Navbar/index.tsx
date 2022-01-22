@@ -46,9 +46,13 @@ const Navbar = () => {
       </Search>
 
       <UserTools>
+        <SearchIcon />
+
+        <Microphone />
+
         <Upload />
 
-        <Menu />
+        <Menu id='menu' />
 
         <Bell />
 
