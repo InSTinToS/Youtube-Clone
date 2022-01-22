@@ -5,7 +5,8 @@
     "**/*.ts",
     "**/*.tsx",
     "next.config.js",
-    "cypress/*"
+    "cypress/*",
+    "*.svg"
   ],
   "compilerOptions": {
     "noEmit": true,

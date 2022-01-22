@@ -1,9 +1,12 @@
 const theme = {
   colors: {
-    red: '#f00',
-    primary: '#8257e6',
-    secondary: '#fcfcfc',
-    background: '#121214'
+    primary: '#FF0000',
+    secondary: '#ffffff',
+    tertiary: '#4D4D4D',
+    quaternary: '#313131',
+    quinary: '#202020',
+    senary: '#121212',
+    septenary: '#676767'
   },
   sizes: {
     '1': '4px',
