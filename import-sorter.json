@@ -1,0 +1,96 @@
+{
+  "importStringConfiguration.tabSize": 2,
+  "generalConfiguration.sortOnBeforeSave": true,
+  "importStringConfiguration.hasSemicolon": false,
+  "importSorter.importStringConfiguration.tabType": "space",
+  "importSorter.importStringConfiguration.trailingComma": "none",
+  "importStringConfiguration.numberOfEmptyLinesAfterAllImports": 1,
+  "importStringConfiguration.maximumNumberOfImportExpressionsPerLine.count": 80,
+  "importStringConfiguration.maximumNumberOfImportExpressionsPerLine.type": "newLineEachExpressionAfterCountLimitExceptIfOnlyOne",
+  "sortConfiguration": {
+    "customOrderingRules": {
+      "rules": [
+        {
+          "regex": "^react$|^./styles$",
+          "orderLevel": 1,
+          "disableSort": true
+        },
+        {
+          "regex": "^next",
+          "orderLevel": 2,
+          "disableSort": true
+        },
+        {
+          "regex": "^./|^../|^bootstrap",
+          "orderLevel": 3,
+          "disableSort": true
+        },
+        {
+          "regex": "^pages",
+          "orderLevel": 6,
+          "disableSort": true
+        },
+        {
+          "regex": "^types",
+          "orderLevel": 7,
+          "disableSort": true
+        },
+        {
+          "regex": "^frontend/page-components",
+          "orderLevel": 9,
+          "disableSort": true
+        },
+        {
+          "regex": "^frontend/styles",
+          "orderLevel": 9,
+          "disableSort": true
+        },
+        {
+          "regex": "^frontend/routes",
+          "orderLevel": 10,
+          "disableSort": true
+        },
+        {
+          "regex": "^frontend/locales",
+          "orderLevel": 11,
+          "disableSort": true
+        },
+        {
+          "regex": "^frontend/utils",
+          "orderLevel": 12,
+          "disableSort": true
+        },
+        {
+          "regex": "^frontend/services",
+          "orderLevel": 13,
+          "disableSort": true
+        },
+        {
+          "regex": "^frontend/store",
+          "orderLevel": 14,
+          "disableSort": true
+        },
+        {
+          "regex": "^frontend/hooks",
+          "orderLevel": 15,
+          "disableSort": true
+        },
+        {
+          "regex": "^frontend/assets",
+          "orderLevel": 16,
+          "disableSort": true
+        },
+        {
+          "regex": "^frontend/components",
+          "orderLevel": 17,
+          "disableSort": true
+        },
+        {
+          "regex": "^frontend/types",
+          "orderLevel": 18,
+          "disableSort": true
+        }
+      ]
+    }
+  }
+}

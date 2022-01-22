@@ -1,0 +1,11 @@
+{
+  "baseUrl": "http://localhost:3000/",
+  "env": {},
+  "fixturesFolder": "./src/frontend/tests/cypress/fixtures",
+  "integrationFolder": "./src/frontend/tests/cypress/integration",
+  "pluginsFile": "./src/frontend/tests/cypress/plugins",
+  "screenshotsFolder": "./src/frontend/tests/cypress/screenshots",
+  "videosFolder": "./src/frontend/tests/cypress/videos",
+  "downloadsFolder": "./src/frontend/tests/cypress/downloads",
+  "supportFile": "./src/frontend/tests/cypress/support"
+}
