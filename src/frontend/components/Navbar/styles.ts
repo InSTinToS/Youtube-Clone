@@ -10,16 +10,6 @@ import {
 
 import styled from 'styled-components'
 
-export const Microphone = styled(MicrophoneIcon)``
-
-export const SearchIcon = styled(OriginalSearchIcon)``
-
-export const Upload = styled(UploadIcon)``
-
-export const Menu = styled(MenuIcon)``
-
-export const Bell = styled(BellIcon)``
-
 export const UserTools = styled.div`
   display: flex;
   align-items: center;
@@ -27,7 +17,7 @@ export const UserTools = styled.div`
 
   margin-right: 16px;
 
-  ${Upload}, ${Menu}, ${Bell} {
+  svg {
     margin: 0 8px;
     width: 24px;
   }
@@ -78,7 +68,7 @@ export const InputWrapper = styled.div`
   display: flex;
   align-items: center;
 
-  width: 572px;
+  width: clamp(100px, 40vw, 572px);
   height: 40px;
 
   border: 1px solid ${({ theme }) => theme.colors.quaternary};
@@ -106,7 +96,11 @@ export const InputWrapper = styled.div`
 `
 
 export const Search = styled.div`
-  display: flex;
+  display: none;
+
+  @media screen and (min-width: 700px) {
+    display: flex;
+  }
 `
 
 export const Youtube = styled(YoutubeIcon)`
@@ -116,8 +110,11 @@ export const Youtube = styled(YoutubeIcon)`
 
 export const Hamburger = styled(HamburgerIcon)`
   margin: 0 24px;
+`
 
-  fill: ${({ theme }) => theme.colors.secondary};
+export const SidebarHeader = styled.div`
+  width: 240px;
+  min-width: 240px;
 `
 
 export const Container = styled.nav`
@@ -133,7 +130,7 @@ export const Container = styled.nav`
 
   background-color: ${({ theme }) => theme.colors.quinary};
 
-  ${Microphone}, ${Upload}, ${Menu}, ${Bell}, ${SearchIcon} {
+  svg:not(#youtube) {
     width: 24px;
     height: 24px;
 

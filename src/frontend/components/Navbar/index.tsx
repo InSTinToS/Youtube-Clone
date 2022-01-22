@@ -1,29 +1,33 @@
 import {
-  Bell,
   Container,
   Hamburger,
   InputWrapper,
-  Menu,
-  Microphone,
   Search,
   SearchButton,
-  SearchIcon,
-  Upload,
+  SidebarHeader,
   UserTools,
   VoiceButton,
   Youtube
 } from './styles'
+
+import {
+  Bell,
+  Menu,
+  Microphone,
+  Search as SearchIcon,
+  Upload
+} from 'frontend/assets/icons'
 
 import React from 'react'
 
 const Navbar = () => {
   return (
     <Container>
-      <div>
+      <SidebarHeader>
         <Hamburger />
 
-        <Youtube />
-      </div>
+        <Youtube id='youtube' />
+      </SidebarHeader>
 
       <Search>
         <InputWrapper>

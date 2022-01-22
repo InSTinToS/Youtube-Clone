@@ -6,17 +6,18 @@ export default createGlobalStyle`
     padding: 0;
     outline: 0;
     box-sizing: border-box;
+
+    font-family: 'Roboto', sans-serif;
   }
   
   html {
     font-size: 62.5%;
-    font-family: 'Roboto', sans-serif;
+    
 
     body {
-      font-size: 1.6rem;
+      font-size: 1.4rem;
       
       color: ${({ theme }) => theme.colors.secondary};
-      background-color: ${({ theme }) => theme.colors.background};
     }
   }
 

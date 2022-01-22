@@ -6,7 +6,10 @@ const theme = {
     quaternary: '#313131',
     quinary: '#202020',
     senary: '#121212',
-    septenary: '#676767'
+    septenary: '#676767',
+    octonary: '#8A8A8A',
+    nonary: '#7F7F7F',
+    denary: '#7F7F7F'
   },
   sizes: {
     '1': '4px',
