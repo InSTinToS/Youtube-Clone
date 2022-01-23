@@ -20,7 +20,7 @@ const CategoriesBar = () => {
   return (
     <Container>
       <div id='left'>
-        <button type='button'> </button>
+        <button type='button'></button>
         <Arrow />
       </div>
 

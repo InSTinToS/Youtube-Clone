@@ -16,8 +16,11 @@ const Home = () => {
 
       <Style>
         <Navbar />
+
         <CategoriesBar />
+
         <Sidebar />
+
         <Content />
       </Style>
     </>

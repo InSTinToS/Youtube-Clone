@@ -27,6 +27,7 @@ export const Container = styled.ul`
   align-items: center;
 
   height: 56px;
+  margin: 0;
 
   background-color: ${({ theme }) => theme.colors.quinary};
   border-top: solid 1px ${({ theme }) => theme.colors.tertiary};
