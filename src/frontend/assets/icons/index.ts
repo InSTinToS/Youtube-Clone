@@ -17,11 +17,13 @@ import Flag from './flag.svg'
 import Feedback from './feedback.svg'
 import Settings from './settings.svg'
 import Videos from './videos.svg'
+import Arrow from './arrow.svg'
 
 export {
   Clock,
   Flag,
   Help,
+  Arrow,
   Feedback,
   Settings,
   History,

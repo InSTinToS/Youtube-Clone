@@ -9,7 +9,7 @@ const theme = {
     septenary: '#676767',
     octonary: '#8A8A8A',
     nonary: '#7F7F7F',
-    denary: '#7F7F7F'
+    denary: '#212121'
   },
   sizes: {
     '1': '4px',
