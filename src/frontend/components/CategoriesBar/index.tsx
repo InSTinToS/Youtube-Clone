@@ -16,9 +16,13 @@ const categories = [
   'Novidades para você'
 ]
 
-const CategoriesBar = () => {
+interface Props {
+  sidebarOpen: boolean
+}
+
+const CategoriesBar = ({ sidebarOpen }: Props) => {
   return (
-    <Container>
+    <Container sidebarOpen={sidebarOpen}>
       <div id='left'>
         <button type='button'></button>
         <Arrow />

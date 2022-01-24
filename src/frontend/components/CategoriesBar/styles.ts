@@ -1,4 +1,8 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
+
+interface ContainerProps {
+  sidebarOpen: boolean
+}
 
 export const Category = styled.li`
   white-space: nowrap;
@@ -17,17 +21,17 @@ export const Category = styled.li`
   }
 `
 
-export const Container = styled.ul`
+export const Container = styled.ul<ContainerProps>`
   position: fixed;
-  right: 0;
   top: 56px;
-  left: 240px;
+  left: 0px;
 
   display: flex;
   align-items: center;
 
-  height: 56px;
   margin: 0;
+  height: 56px;
+  width: 100vw;
 
   background-color: ${({ theme }) => theme.colors.quinary};
   border-top: solid 1px ${({ theme }) => theme.colors.tertiary};
@@ -75,5 +79,12 @@ export const Container = styled.ul`
 
       fill: ${({ theme }) => theme.colors.secondary};
     }
+  }
+
+  @media screen and (min-width: 800px) {
+    ${({ sidebarOpen }) => css`
+      width: ${`calc(100vw - ${sidebarOpen ? '240px' : '72px'})`};
+      left: ${sidebarOpen ? 240 : 72}px;
+    `}
   }
 `

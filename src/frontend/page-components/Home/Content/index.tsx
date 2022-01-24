@@ -39,9 +39,13 @@ const videos = [
   ''
 ]
 
-const Content = () => {
+interface Props {
+  sidebarOpen: boolean
+}
+
+const Content = ({ sidebarOpen }: Props) => {
   return (
-    <Container>
+    <Container sidebarOpen={sidebarOpen}>
       <ul>
         {videos.map((video, index) => (
           <Video key={index} />

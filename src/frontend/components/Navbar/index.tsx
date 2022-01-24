@@ -20,11 +20,15 @@ import {
 
 import React from 'react'
 
-const Navbar = () => {
+interface Props {
+  onHamburgerClick?: () => void
+}
+
+const Navbar = ({ onHamburgerClick }: Props) => {
   return (
     <Container>
       <SidebarHeader>
-        <Hamburger />
+        <Hamburger onClick={onHamburgerClick} />
 
         <Youtube id='youtube' />
       </SidebarHeader>

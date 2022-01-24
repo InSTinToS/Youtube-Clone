@@ -1,4 +1,8 @@
-import styled from 'styled-components'
+import styled, { css, keyframes } from 'styled-components'
+
+interface OpenProp {
+  open?: boolean
+}
 
 export const Footer = styled.div`
   padding: 16px 24px;
@@ -25,7 +29,7 @@ export const UlTitle = styled.span`
   color: ${({ theme }) => theme.colors.octonary};
 `
 
-export const SidebarItem = styled.li`
+export const SidebarItem = styled.li<OpenProp>`
   display: flex;
   align-items: center;
 
@@ -55,18 +59,28 @@ export const SidebarItem = styled.li`
     display: inline-block;
     min-width: 143px;
   }
+
+  #explore {
+    fill: none;
+
+    stroke: ${({ theme }) => theme.colors.secondary};
+  }
 `
 
-export const Container = styled.div`
+export const Content = styled.div`
+  width: 100%;
+  height: calc(100vh - 56px);
+
+  background-color: ${({ theme }) => theme.colors.quinary};
+`
+
+export const Container = styled.aside<OpenProp>`
   position: fixed;
   top: 56px;
   left: 0;
-  bottom: 0;
 
   width: 240px;
   overflow-y: hidden;
-
-  background-color: ${({ theme }) => theme.colors.quinary};
 
   :hover {
     overflow-y: scroll;
@@ -86,4 +100,36 @@ export const Container = styled.div`
   ul {
     padding: 12px 0;
   }
+
+  ${({ open }) =>
+    !open &&
+    css`
+      :hover {
+        overflow-y: hidden;
+      }
+
+      @media screen and (min-width: 800px) {
+        width: ${open ? 250 : 72}px;
+
+        ${SidebarItem} {
+          align-items: center;
+          flex-direction: column;
+          justify-content: center;
+
+          padding: 0;
+          height: 74px;
+
+          text-align: center;
+
+          svg {
+            margin: 0 0 6px 0;
+          }
+
+          span {
+            min-width: 100%;
+            font-size: 1.3rem;
+          }
+        }
+      }
+    `}
 `
