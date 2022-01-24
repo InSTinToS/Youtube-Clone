@@ -1,8 +1,16 @@
-import { Category, Container } from './styles'
+import {
+  Categories,
+  Category,
+  Container,
+  LeftArrow,
+  RightArrow,
+  Shadow
+} from './styles'
 
 import { Arrow } from 'frontend/assets/icons'
 
-import React from 'react'
+import { motion } from 'framer-motion'
+import React, { useEffect, useRef, useState } from 'react'
 
 const categories = [
   'Tudo',
@@ -13,7 +21,15 @@ const categories = [
   'JavaScript',
   'Loops',
   'Ao vivo',
-  'Novidades para você'
+  'Comédia',
+  'Marvel',
+  'DC',
+  'League of Legends',
+  'House Music',
+  'Slap House',
+  'Enviados recentemente',
+  'Música brasileira',
+  'Universos'
 ]
 
 interface Props {
@@ -21,23 +37,75 @@ interface Props {
 }
 
 const CategoriesBar = ({ sidebarOpen }: Props) => {
+  const ulRef = useRef<HTMLUListElement>(null)
+  const categoriesRef = useRef<HTMLDivElement>(null)
+
+  const [x, setX] = useState(0)
+  const [maxSize, setMaxSize] = useState(0)
+  const [selected, setSelected] = useState('Tudo')
+
+  const handleCategorySelect = (category: string) => {
+    selected !== category && setSelected(category)
+  }
+
+  const handleLeftArrow = () => {
+    setX(x => x + 200)
+  }
+
+  const handleRightArrow = () => {
+    setX(x => x - 200)
+  }
+
+  const handleDragEnd = (_, { offset }) => {
+    setX(x => x + offset.x)
+  }
+
+  useEffect(() => {
+    setMaxSize(-ulRef.current?.clientWidth + categoriesRef.current?.clientWidth)
+  }, [ulRef.current?.clientWidth, categoriesRef.current?.clientWidth])
+
+  useEffect(() => {
+    if (x < maxSize) setX(maxSize)
+    if (x > 0) setX(0)
+  }, [x, maxSize])
+
   return (
     <Container sidebarOpen={sidebarOpen}>
-      <div id='left'>
-        <button type='button'></button>
+      <LeftArrow visible={x !== 0} onClick={handleLeftArrow}>
         <Arrow />
-      </div>
+        <Shadow />
+      </LeftArrow>
 
-      {categories.map(category => (
-        <Category key={category}>
-          <button type='button'>{category}</button>
-        </Category>
-      ))}
+      <Categories ref={categoriesRef}>
+        <motion.ul
+          drag='x'
+          ref={ulRef}
+          animate={{ x }}
+          dragElastic={0.05}
+          onDragEnd={handleDragEnd}
+          dragConstraints={categoriesRef}
+        >
+          {categories.map(category => (
+            <Category
+              key={category}
+              selected={selected === category}
+              onClick={() => handleCategorySelect(category)}
+            >
+              <button type='button'>{category}</button>
+            </Category>
+          ))}
+        </motion.ul>
+      </Categories>
 
-      <div id='right'>
+      <RightArrow
+        id='right'
+        type='button'
+        visible={x > maxSize}
+        onClick={handleRightArrow}
+      >
         <Arrow />
-        <button type='button'></button>
-      </div>
+        <Shadow />
+      </RightArrow>
     </Container>
   )
 }
