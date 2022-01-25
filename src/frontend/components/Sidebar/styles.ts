@@ -1,7 +1,11 @@
-import styled, { css, keyframes } from 'styled-components'
+import styled, { css } from 'styled-components'
 
 interface OpenProp {
   open?: boolean
+}
+
+interface SidebarItemProps extends OpenProp {
+  isSelected: boolean
 }
 
 export const Footer = styled.div`
@@ -29,60 +33,82 @@ export const UlTitle = styled.span`
   color: ${({ theme }) => theme.colors.octonary};
 `
 
-export const SidebarItem = styled.li<OpenProp>`
-  display: flex;
-  align-items: center;
+export const SidebarItem = styled.li<SidebarItemProps>`
+  button {
+    display: flex;
+    align-items: center;
 
-  width: 100%;
-  height: 40px;
-  padding: 0 24px;
+    width: 100%;
+    height: 40px;
+    padding: 0 24px;
+    cursor: pointer;
 
-  svg,
-  img {
-    width: 24px;
-    height: 24px;
-    min-width: 24px;
-    min-height: 24px;
+    background-color: ${({ theme, isSelected }) =>
+      isSelected && theme.colors.quaternary};
 
-    margin-right: 24px;
+    svg,
+    img {
+      width: 24px;
+      height: 24px;
+      min-width: 24px;
+      min-height: 24px;
+      margin-right: 24px;
+    }
+
+    img {
+      border-radius: 50%;
+    }
+
+    svg {
+      fill: ${({ theme }) => theme.colors.secondary};
+    }
+
+    span {
+      display: inline-block;
+
+      min-width: 143px;
+      text-align: left;
+
+      color: ${({ theme }) => theme.colors.secondary};
+    }
   }
 
-  img {
-    border-radius: 50%;
-  }
+  @media screen and (min-width: 800px) {
+    ${({ open }) =>
+      !open &&
+      css`
+        button {
+          flex-direction: column;
+          justify-content: center;
 
-  svg {
-    fill: ${({ theme }) => theme.colors.secondary};
-  }
+          padding: 0;
+          height: 74px;
 
-  span {
-    display: inline-block;
-    min-width: 143px;
-  }
+          svg {
+            margin: 0 0 6px 0;
+          }
 
-  #explore {
-    fill: none;
+          span {
+            min-width: 100%;
 
-    stroke: ${({ theme }) => theme.colors.secondary};
+            font-size: 1.3rem;
+            text-align: center;
+          }
+        }
+      `}
   }
 `
 
-export const Content = styled.div`
-  width: 100%;
+export const Content = styled.div<OpenProp>`
+  overflow-y: hidden;
   height: calc(100vh - 56px);
+  width: ${({ open }) => (open ? 240 : 72)}px;
+  padding-right: ${({ open }) => (open ? 16 : 0)}px;
 
   background-color: ${({ theme }) => theme.colors.quinary};
-`
-
-export const Container = styled.aside<OpenProp>`
-  position: fixed;
-  top: 56px;
-  left: 0;
-
-  width: 240px;
-  overflow-y: hidden;
 
   :hover {
+    padding: 0;
     overflow-y: scroll;
   }
 
@@ -91,10 +117,11 @@ export const Container = styled.aside<OpenProp>`
   }
 
   ::-webkit-scrollbar-thumb {
+    height: 30px;
     border-radius: 16px;
-    border: 4px solid ${({ theme }) => theme.colors.quinary};
 
-    background: ${({ theme }) => theme.colors.septenary};
+    background: ${({ theme }) => theme.colors.octonary};
+    border: 4px solid ${({ theme }) => theme.colors.quinary};
   }
 
   ul {
@@ -107,29 +134,11 @@ export const Container = styled.aside<OpenProp>`
       :hover {
         overflow-y: hidden;
       }
-
-      @media screen and (min-width: 800px) {
-        width: ${open ? 250 : 72}px;
-
-        ${SidebarItem} {
-          align-items: center;
-          flex-direction: column;
-          justify-content: center;
-
-          padding: 0;
-          height: 74px;
-
-          text-align: center;
-
-          svg {
-            margin: 0 0 6px 0;
-          }
-
-          span {
-            min-width: 100%;
-            font-size: 1.3rem;
-          }
-        }
-      }
     `}
+`
+
+export const Container = styled.aside`
+  position: fixed;
+  top: 56px;
+  left: 0;
 `

@@ -19,7 +19,8 @@ import {
 } from 'frontend/assets/icons'
 
 import { Transition, Variants } from 'framer-motion'
-import React from 'react'
+import { user } from 'frontend/fakeData/user'
+import React, { useEffect, useState } from 'react'
 
 const sidebarData = {
   default: [
@@ -33,28 +34,6 @@ const sidebarData = {
     { icon: <Videos />, label: 'Seus vídeos' },
     { icon: <Clock />, label: 'Assistir mais tarde' },
     { icon: <Like />, label: 'Gostei' }
-  ],
-  subscriptions: [
-    {
-      src: 'https://yt3.ggpht.com/ytc/AKedOLQXBi2lvEiZsNllWfciqPkYUGibZxGIdsSqn1BIdA=s88-c-k-c0x00ffffff-no-rj',
-      label: 'Spinning Records'
-    },
-    {
-      src: 'https://yt3.ggpht.com/ytc/AKedOLQXBi2lvEiZsNllWfciqPkYUGibZxGIdsSqn1BIdA=s88-c-k-c0x00ffffff-no-rj',
-      label: 'Spinning Records'
-    },
-    {
-      src: 'https://yt3.ggpht.com/ytc/AKedOLQXBi2lvEiZsNllWfciqPkYUGibZxGIdsSqn1BIdA=s88-c-k-c0x00ffffff-no-rj',
-      label: 'Spinning Records'
-    },
-    {
-      src: 'https://yt3.ggpht.com/ytc/AKedOLQXBi2lvEiZsNllWfciqPkYUGibZxGIdsSqn1BIdA=s88-c-k-c0x00ffffff-no-rj',
-      label: 'Spinning Records'
-    },
-    {
-      src: 'https://yt3.ggpht.com/ytc/AKedOLQXBi2lvEiZsNllWfciqPkYUGibZxGIdsSqn1BIdA=s88-c-k-c0x00ffffff-no-rj',
-      label: 'Spinning Records'
-    }
   ],
   settings: [
     { icon: <Settings />, label: 'Configurações' },
@@ -82,19 +61,28 @@ const appearAnimation: Variants = {
 const Sidebar = ({ open }: Props) => {
   const { innerWidth } = useWindowDimensions()
 
+  const [selected, setSelected] = useState('Início')
+
   return (
-    <Container open={open}>
+    <Container>
       <Presence
-        withPresence={innerWidth < 800}
         condition={open}
         transition={transition}
         variants={appearAnimation}
+        withPresence={innerWidth < 800}
       >
-        <Content>
+        <Content open={open}>
           <ul>
             {sidebarData.default.map(({ icon: Icon, label }) => (
-              <SidebarItem key={label}>
-                {Icon} <span>{label}</span>
+              <SidebarItem
+                open={open}
+                key={label}
+                isSelected={selected === label}
+                onClick={() => setSelected(label)}
+              >
+                <button>
+                  {Icon} <span>{label}</span>
+                </button>
               </SidebarItem>
             ))}
           </ul>
@@ -105,8 +93,15 @@ const Sidebar = ({ open }: Props) => {
 
               <ul>
                 {sidebarData.others.map(({ icon: Icon, label }) => (
-                  <SidebarItem key={label}>
-                    {Icon} <span>{label}</span>
+                  <SidebarItem
+                    open={open}
+                    key={label}
+                    isSelected={selected === label}
+                    onClick={() => setSelected(label)}
+                  >
+                    <button>
+                      {Icon} <span>{label}</span>
+                    </button>
                   </SidebarItem>
                 ))}
               </ul>
@@ -115,19 +110,37 @@ const Sidebar = ({ open }: Props) => {
 
               <UlTitle>inscrições</UlTitle>
 
-              {sidebarData.subscriptions.map(({ label, src }, index) => (
-                <SidebarItem key={index}>
-                  <img src={src} /> <span>{label}</span>
-                </SidebarItem>
-              ))}
+              <ul>
+                {user.subscriptions.map(({ name, logo }, index) => (
+                  <SidebarItem
+                    open={open}
+                    key={index}
+                    isSelected={selected === name}
+                    onClick={() => setSelected(name)}
+                  >
+                    <button>
+                      <img src={logo} /> <span>{name}</span>
+                    </button>
+                  </SidebarItem>
+                ))}
+              </ul>
 
               <hr />
 
-              {sidebarData.settings.map(({ icon: Icon, label }) => (
-                <SidebarItem key={label}>
-                  {Icon} <span>{label}</span>
-                </SidebarItem>
-              ))}
+              <ul>
+                {sidebarData.settings.map(({ icon: Icon, label }) => (
+                  <SidebarItem
+                    open={open}
+                    key={label}
+                    isSelected={selected === label}
+                    onClick={() => setSelected(label)}
+                  >
+                    <button>
+                      {Icon} <span>{label}</span>
+                    </button>
+                  </SidebarItem>
+                ))}
+              </ul>
 
               <hr />
 

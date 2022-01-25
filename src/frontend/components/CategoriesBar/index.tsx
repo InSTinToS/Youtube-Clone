@@ -10,27 +10,8 @@ import {
 import { Arrow } from 'frontend/assets/icons'
 
 import { motion } from 'framer-motion'
+import { categories } from 'frontend/fakeData/categories'
 import React, { useEffect, useRef, useState } from 'react'
-
-const categories = [
-  'Tudo',
-  'Jogos',
-  'Podcast',
-  'História',
-  'Música',
-  'JavaScript',
-  'Loops',
-  'Ao vivo',
-  'Comédia',
-  'Marvel',
-  'DC',
-  'League of Legends',
-  'House Music',
-  'Slap House',
-  'Enviados recentemente',
-  'Música brasileira',
-  'Universos'
-]
 
 interface Props {
   sidebarOpen: boolean
@@ -63,7 +44,7 @@ const CategoriesBar = ({ sidebarOpen }: Props) => {
   useEffect(() => {
     setMaxSize(-ulRef.current?.clientWidth + categoriesRef.current?.clientWidth)
   }, [ulRef.current?.clientWidth, categoriesRef.current?.clientWidth])
-
+  ;('https://yt3.ggpht.com/52bJiKEiq5DSQ4ZRg41TCFB4FAkFL0q2GKCqFlsuP4ssKQhcYnsGmEow7YWWoj5cf1VI2HqsJHY=s88-c-k-c0x00ffffff-no-rj-mo')
   useEffect(() => {
     if (x < maxSize) setX(maxSize)
     if (x > 0) setX(0)
@@ -80,7 +61,7 @@ const CategoriesBar = ({ sidebarOpen }: Props) => {
         <motion.ul
           drag='x'
           ref={ulRef}
-          animate={{ x }}
+          animate={{ x, transition: { type: 'tween', duration: 0.2 } }}
           dragElastic={0.05}
           onDragEnd={handleDragEnd}
           dragConstraints={categoriesRef}

@@ -18,6 +18,7 @@ import {
   Upload
 } from 'frontend/assets/icons'
 
+import { user } from 'frontend/fakeData/user'
 import React from 'react'
 
 interface Props {
@@ -30,7 +31,7 @@ const Navbar = ({ onHamburgerClick }: Props) => {
       <SidebarHeader>
         <Hamburger onClick={onHamburgerClick} />
 
-        <Youtube id='youtube' />
+        <Youtube />
       </SidebarHeader>
 
       <Search>
@@ -56,14 +57,11 @@ const Navbar = ({ onHamburgerClick }: Props) => {
 
         <Upload />
 
-        <Menu id='menu' />
+        <Menu />
 
         <Bell />
 
-        <img
-          id='avatar'
-          src='https://yt3.ggpht.com/52bJiKEiq5DSQ4ZRg41TCFB4FAkFL0q2GKCqFlsuP4ssKQhcYnsGmEow7YWWoj5cf1VI2HqsJHY=s88-c-k-c0x00ffffff-no-rj-mo'
-        />
+        <img id='avatar' src={user.avatar} />
       </UserTools>
     </Container>
   )

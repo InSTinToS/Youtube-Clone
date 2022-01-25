@@ -1,10 +1,5 @@
 import {
-  Bell as BellIcon,
   Hamburger as HamburgerIcon,
-  Menu as MenuIcon,
-  Microphone as MicrophoneIcon,
-  Search as OriginalSearchIcon,
-  Upload as UploadIcon,
   Youtube as YoutubeIcon
 } from 'frontend/assets/icons'
 
@@ -19,10 +14,6 @@ export const UserTools = styled.div`
     display: none;
   }
 
-  #menu {
-    display: block;
-  }
-
   #avatar {
     width: 32px;
     margin: 0 14px;
@@ -33,8 +24,8 @@ export const UserTools = styled.div`
     svg {
       display: block;
 
-      margin: 0 8px;
       width: 24px;
+      margin: 0 8px;
     }
   }
 
@@ -85,8 +76,8 @@ export const InputWrapper = styled.div`
   height: 40px;
   width: min(30vw, 572px);
 
-  border: 1px solid ${({ theme }) => theme.colors.quaternary};
   background-color: ${({ theme }) => theme.colors.senary};
+  border: 1px solid ${({ theme }) => theme.colors.quaternary};
 
   input {
     width: 100%;
@@ -145,7 +136,7 @@ export const Container = styled.nav`
 
   background-color: ${({ theme }) => theme.colors.quinary};
 
-  svg:not(#youtube) {
+  svg:not(${Youtube}) {
     width: 24px;
     height: 24px;
 
