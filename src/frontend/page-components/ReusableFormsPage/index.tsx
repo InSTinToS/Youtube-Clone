@@ -2,13 +2,17 @@ import { Container } from './styles'
 import Text from './components/Text'
 import ArrayText from './components/ArrayText'
 
-import { Form, Formik } from 'formik'
+import User, { REQ_POST_User, RES_POST_User } from 'types/routes/user'
+
+import api, { post, put } from 'frontend/services'
+
+import { Form, Formik, FormikHelpers } from 'formik'
 import React from 'react'
 
 const initialValues = {
   user: {
     avatar:
-      'https://yt3.ggpht.com/52bJiKEiq5DSQ4ZRg41TCFB4FAkFL0q2GKCqFlsuP4ssKQhcYnsGmEow7YWWoj5cf1VI2HqsJHY=s88-c-k-c0x00ffffff-no-rj-mo'
+      'https://yt2.ggpht.com/52bJiKEiq5DSQ4ZRg41TCFB4FAkFL0q2GKCqFlsuP4ssKQhcYnsGmEow7YWWoj5cf1VI2HqsJHY=s88-c-k-c0x00ffffff-no-rj-mo'
   },
   channels: [
     {
@@ -30,8 +34,14 @@ const initialValues = {
 }
 
 const ReusableFormsPage = () => {
-  const onFormSubmit = (values: any, actions: any) => {
-    console.log({ values, actions })
+  const onFormSubmit = (sent: any, received) => {}
+
+  const onUserSubmit = async (values: User, actions: FormikHelpers<User>) => {
+    const res = await put<REQ_POST_User, RES_POST_User>('/user', {
+      user: values
+    })
+
+    if (!res.data.success) throw new console.error(res.data.message)
   }
 
   return (
@@ -39,7 +49,7 @@ const ReusableFormsPage = () => {
       <section>
         <h2>User</h2>
 
-        <Formik initialValues={initialValues.user} onSubmit={onFormSubmit}>
+        <Formik initialValues={initialValues.user} onSubmit={onUserSubmit}>
           <Form>
             <Text name='avatar' label='Avatar URL' />
 

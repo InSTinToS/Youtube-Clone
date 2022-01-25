@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 
 export interface DefaultResType {
-  message: string
+  message?: string
   success: boolean
 }
 
