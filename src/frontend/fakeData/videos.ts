@@ -24,38 +24,6 @@ const video: Video = {
   }
 }
 
-export const videos: Video[] = [
-  video,
-  video,
-  video,
-  video,
-  video,
-  video,
-  video,
-  video,
-  video,
-  video,
-  video,
-  video,
-  video,
-  video,
-  video,
-  video,
-  video,
-  video,
-  video,
-  video,
-  video,
-  video,
-  video,
-  video,
-  video,
-  video,
-  video,
-  video,
-  video,
-  video,
-  video
-]
+export const videos: Video[] = [video]
 
 export default Video

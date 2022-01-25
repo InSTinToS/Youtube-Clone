@@ -1,6 +1,6 @@
 import Head from 'next/head'
 
-import Style from './style'
+import { Container } from './styles'
 import Content from './Content'
 
 import useWindowDimensions from 'frontend/hooks/useWindowDimensions'
@@ -29,7 +29,7 @@ const Home = () => {
         <title>Home page</title>
       </Head>
 
-      <Style>
+      <Container>
         <Navbar onHamburgerClick={handleSidebar} />
 
         <CategoriesBar sidebarOpen={sidebarOpen} />
@@ -37,7 +37,7 @@ const Home = () => {
         <Sidebar open={sidebarOpen} />
 
         <Content sidebarOpen={sidebarOpen} />
-      </Style>
+      </Container>
     </>
   )
 }

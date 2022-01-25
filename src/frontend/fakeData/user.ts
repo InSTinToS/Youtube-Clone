@@ -15,26 +15,6 @@ export const user = {
     {
       logo: 'https://yt3.ggpht.com/ytc/AKedOLQXBi2lvEiZsNllWfciqPkYUGibZxGIdsSqn1BIdA=s88-c-k-c0x00ffffff-no-rj',
       name: 'Spinning Records'
-    },
-    {
-      logo: 'https://yt3.ggpht.com/ytc/AKedOLQXBi2lvEiZsNllWfciqPkYUGibZxGIdsSqn1BIdA=s88-c-k-c0x00ffffff-no-rj',
-      name: 'Spinning Records'
-    },
-    {
-      logo: 'https://yt3.ggpht.com/ytc/AKedOLQXBi2lvEiZsNllWfciqPkYUGibZxGIdsSqn1BIdA=s88-c-k-c0x00ffffff-no-rj',
-      name: 'Spinning Records'
-    },
-    {
-      logo: 'https://yt3.ggpht.com/ytc/AKedOLQXBi2lvEiZsNllWfciqPkYUGibZxGIdsSqn1BIdA=s88-c-k-c0x00ffffff-no-rj',
-      name: 'Spinning Records'
-    },
-    {
-      logo: 'https://yt3.ggpht.com/ytc/AKedOLQXBi2lvEiZsNllWfciqPkYUGibZxGIdsSqn1BIdA=s88-c-k-c0x00ffffff-no-rj',
-      name: 'Spinning Records'
-    },
-    {
-      logo: 'https://yt3.ggpht.com/ytc/AKedOLQXBi2lvEiZsNllWfciqPkYUGibZxGIdsSqn1BIdA=s88-c-k-c0x00ffffff-no-rj',
-      name: 'Spinning Records'
     }
   ]
 }
