@@ -1,7 +1,8 @@
 import { Container } from './styles'
 import Text from '../Text'
-import minus from '../../assets/minus.png'
-import add from '../../assets/add.png'
+
+import add from 'frontend/assets/icons/add.png'
+import minus from 'frontend/assets/icons/minus.png'
 
 import { FieldArray, FieldArrayRenderProps } from 'formik'
 import React from 'react'

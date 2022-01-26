@@ -1,3 +1,3 @@
-import ReusableFormsPage from 'frontend/page-components/ReusableFormsPage'
+import Forms from 'frontend/page-components/Forms'
 
-export default ReusableFormsPage
+export default Forms

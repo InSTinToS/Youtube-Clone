@@ -5,9 +5,8 @@ export const Container = styled.main`
   align-items: center;
   flex-direction: column;
 
-  padding: 24px 0;
-
   height: 100vh;
+  padding: 24px 0;
   overflow-y: scroll;
 
   background-color: #120022;
@@ -21,7 +20,7 @@ export const Container = styled.main`
     border-radius: 16px;
 
     background: #fff;
-    border: 4px solid #551a8b;
+    border: 4px solid #120022;
   }
 
   section {
@@ -42,8 +41,8 @@ export const Container = styled.main`
       justify-content: center;
 
       padding: 16px;
-      margin-bottom: 24px;
       border-radius: 4px;
+      margin-bottom: 24px;
 
       background-color: #551a8b;
 
@@ -53,14 +52,6 @@ export const Container = styled.main`
         + * {
           margin-top: 16px;
         }
-      }
-
-      > button {
-        padding: 8px;
-        border-radius: 4px;
-
-        color: #fff;
-        background-color: #aa4eff;
       }
     }
   }

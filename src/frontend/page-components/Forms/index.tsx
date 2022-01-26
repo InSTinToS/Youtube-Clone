@@ -1,12 +1,9 @@
 import { Container } from './styles'
-import Text from './components/Text'
-import ArrayText from './components/ArrayText'
+import User from './User'
 
-import User, { REQ_POST_User, RES_POST_User } from 'types/routes/user'
+import ArrayText from 'frontend/components/Form/ArrayText'
 
-import api, { post, put } from 'frontend/services'
-
-import { Form, Formik, FormikHelpers } from 'formik'
+import { Form, Formik } from 'formik'
 import React from 'react'
 
 const initialValues = {
@@ -34,36 +31,16 @@ const initialValues = {
 }
 
 const ReusableFormsPage = () => {
-  const onFormSubmit = (sent: any, received) => {}
-
-  const onUserSubmit = async (values: User, actions: FormikHelpers<User>) => {
-    const res = await put<REQ_POST_User, RES_POST_User>('/user', {
-      user: values
-    })
-
-    if (!res.data.success) throw new console.error(res.data.message)
-  }
-
   return (
     <Container>
-      <section>
-        <h2>User</h2>
-
-        <Formik initialValues={initialValues.user} onSubmit={onUserSubmit}>
-          <Form>
-            <Text name='avatar' label='Avatar URL' />
-
-            <button type='submit'>Atualizar</button>
-          </Form>
-        </Formik>
-      </section>
+      <User />
 
       <section>
         <h2>Channels</h2>
 
         <Formik
+          onSubmit={() => {}}
           initialValues={{ channels: initialValues.channels }}
-          onSubmit={onFormSubmit}
         >
           {({ values }) => (
             <Form>
@@ -87,7 +64,7 @@ const ReusableFormsPage = () => {
 
         <Formik
           initialValues={{ videos: initialValues.videos }}
-          onSubmit={onFormSubmit}
+          onSubmit={() => {}}
         >
           {({ values }) => (
             <Form>
@@ -113,7 +90,7 @@ const ReusableFormsPage = () => {
         <h2>Categories</h2>
 
         <Formik
-          onSubmit={onFormSubmit}
+          onSubmit={() => {}}
           initialValues={{ categories: initialValues.categories }}
         >
           {({ values }) => (

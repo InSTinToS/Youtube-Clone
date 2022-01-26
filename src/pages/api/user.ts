@@ -9,6 +9,6 @@ export default async function handler(req, res) {
       return addUser(req, res)
 
     case 'PUT':
-      updateUser(req, res)
+      return updateUser(req, res)
   }
 }

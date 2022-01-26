@@ -13,7 +13,6 @@ import { ObjectId } from 'mongodb'
 const getUser: NextRouteType<RES_GET_User> = async (_req, res) => {
   try {
     let { db } = await connectToMongoDB()
-
     const user = await db.collection<User>('user').findOne()
 
     return res.json({ user, success: true })
@@ -25,14 +24,16 @@ const getUser: NextRouteType<RES_GET_User> = async (_req, res) => {
 const addUser: NextRouteType<RES_POST_User> = async (req, res) => {
   try {
     const { user }: REQ_POST_User = req.body
-
     let { db } = await connectToMongoDB()
+    const newId = new ObjectId()
 
-    await db
+    await db.collection<User>('user').insertOne({ _id: newId, ...user })
+
+    const updatedUser = await db
       .collection<User>('user')
-      .insertOne({ _id: new ObjectId(), ...user })
+      .findOne({ _id: newId })
 
-    return res.json({ success: true })
+    return res.json({ success: true, user: updatedUser })
   } catch (error) {
     return res.json({ success: false, message: new Error(error).message })
   }
@@ -41,14 +42,17 @@ const addUser: NextRouteType<RES_POST_User> = async (req, res) => {
 const updateUser: NextRouteType<RES_PUT_User> = async (req, res) => {
   try {
     const { user }: REQ_PUT_User = req.body
-
     let { db } = await connectToMongoDB()
 
-    await db
+    const updatedUser = await db
       .collection<User>('user')
-      .findOneAndReplace({ id: user._id }, { avatar: user.avatar })
+      .findOneAndReplace(
+        { _id: new ObjectId(user._id) },
+        { avatar: user.avatar },
+        { returnDocument: 'after' }
+      )
 
-    return res.json({ success: true })
+    return res.json({ success: true, user: updatedUser.value })
   } catch (error) {
     return res.json({ success: false, message: new Error(error).message })
   }
