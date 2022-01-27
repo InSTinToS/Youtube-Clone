@@ -1,12 +1,46 @@
-import { RES_GET_User } from 'types/routes/user'
+import { UserStore } from '../'
+
+import User, { RES_GET_User } from 'types/routes/user'
 
 import { get } from 'frontend/services'
 
-type GetUser = () => Promise<RES_GET_User>
+import { ExtraReducers, RootStore } from 'frontend/types/redux'
 
-const getUser: GetUser = async () => {
-  const { data } = await get<RES_GET_User>('/user')
-  return data
+import { createAsyncThunk } from '@reduxjs/toolkit'
+
+interface GetUserParams {
+  callOnlyIfNotExists?: boolean
 }
 
-export default getUser
+const getUserThunk = createAsyncThunk<User, GetUserParams>(
+  'user/getUser',
+  async ({ callOnlyIfNotExists = false }, { getState }) => {
+    const { userStore } = getState() as RootStore
+
+    if (!callOnlyIfNotExists || !userStore?.user?._id) {
+      const { data } = await get<RES_GET_User>('/user')
+      console.log('here', data)
+
+      if (data?.user) return data.user
+    }
+
+    return userStore.user
+  }
+)
+
+export const getUserCases: ExtraReducers<UserStore> = ({ addCase }) => {
+  addCase(getUserThunk.pending, state => {
+    state.loading = true
+  })
+
+  addCase(getUserThunk.fulfilled, (state, { payload }) => {
+    state.loading = false
+    state.user = payload
+  })
+
+  addCase(getUserThunk.rejected, state => {
+    state.loading = false
+  })
+}
+
+export default getUserThunk

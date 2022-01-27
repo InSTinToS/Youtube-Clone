@@ -2,7 +2,9 @@ import {
   AnimatePresence,
   AnimatePresenceProps,
   HTMLMotionProps,
-  motion
+  motion,
+  Transition,
+  Variants
 } from 'framer-motion'
 import React, { forwardRef, ReactNode } from 'react'
 
@@ -11,6 +13,17 @@ export interface PresenceProps extends HTMLMotionProps<'div'> {
   children: ReactNode
   presenceProps?: AnimatePresenceProps
   withPresence?: boolean
+}
+
+const defaultTransition: Transition = {
+  type: 'tween',
+  duration: 0.3
+}
+
+const defaultAnimation: Variants = {
+  exit: { opacity: 0 },
+  enter: { opacity: 1 },
+  initial: { opacity: 0 }
 }
 
 const Presence = forwardRef<any, PresenceProps>(
@@ -36,6 +49,8 @@ const Presence = forwardRef<any, PresenceProps>(
             animate={animate}
             initial={initial}
             className='Presence'
+            variants={defaultAnimation}
+            transition={defaultTransition}
             {...props}
           >
             {children}

@@ -25,7 +25,7 @@ import React, { useEffect, useState } from 'react'
 const sidebarData = {
   default: [
     { icon: <Home />, label: 'Início' },
-    { icon: <Explore id='explore' />, label: 'Explorar' },
+    { icon: <Explore />, label: 'Explorar' },
     { icon: <Subscriptions />, label: 'Inscrições' }
   ],
   others: [

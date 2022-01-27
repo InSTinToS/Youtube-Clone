@@ -10,6 +10,9 @@ import {
   Youtube
 } from './styles'
 
+import { UserStore } from 'frontend/store/user'
+import getUserThunk from 'frontend/store/user/extraReducers/getUser'
+
 import {
   Bell,
   Menu,
@@ -18,14 +21,27 @@ import {
   Upload
 } from 'frontend/assets/icons'
 
+import { RootStore } from 'frontend/types/redux'
+
 import { user } from 'frontend/fakeData/user'
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
 interface Props {
   onHamburgerClick?: () => void
 }
 
 const Navbar = ({ onHamburgerClick }: Props) => {
+  const userStore = useSelector<RootStore, UserStore>(
+    ({ userStore }) => userStore
+  )
+
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(getUserThunk({ callOnlyIfNotExists: true }))
+  }, [])
+
   return (
     <Container>
       <SidebarHeader>
@@ -61,7 +77,7 @@ const Navbar = ({ onHamburgerClick }: Props) => {
 
         <Bell />
 
-        <img id='avatar' src={user.avatar} />
+        <img id='avatar' src={userStore.user?.avatar || user.avatar} />
       </UserTools>
     </Container>
   )

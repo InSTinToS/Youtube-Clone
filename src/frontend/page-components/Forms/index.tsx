@@ -30,7 +30,7 @@ const initialValues = {
   categories: ['Tudo', 'SlapHouse']
 }
 
-const ReusableFormsPage = () => {
+const Forms = () => {
   return (
     <Container>
       <User />
@@ -125,4 +125,4 @@ const ReusableFormsPage = () => {
   )
 }
 
-export default ReusableFormsPage
+export default Forms

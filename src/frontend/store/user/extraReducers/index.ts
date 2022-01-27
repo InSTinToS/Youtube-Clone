@@ -1,20 +1,10 @@
 import { UserStore } from '../'
-import getUser from './getUser'
+import { getUserCases } from './getUser'
 
 import { ExtraReducers } from 'frontend/types/redux'
 
-import { createAsyncThunk } from '@reduxjs/toolkit'
-
-export const getUserThunk = createAsyncThunk('user/getUser', getUser)
-
-const extraReducers: ExtraReducers<UserStore> = ({ addCase }) => {
-  addCase(getUserThunk.pending, state => ({ ...state }))
-
-  addCase(getUserThunk.fulfilled, (state, { payload }) => ({
-    ...state,
-    ...payload,
-    loading: false
-  }))
+const extraReducers: ExtraReducers<UserStore> = caseBuilder => {
+  getUserCases(caseBuilder)
 }
 
 export default extraReducers

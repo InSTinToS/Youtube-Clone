@@ -1,16 +1,18 @@
 import extraReducers from './extraReducers'
 import reducers from './reducers'
 
-import User from 'types/routes/user'
+import UserType from 'types/routes/user'
 
 import { createSlice } from '@reduxjs/toolkit'
 
 export interface UserStore {
-  user?: User
+  user?: UserType
   loading: boolean
 }
 
-export const initialState: UserStore = { loading: true }
+export const initialState: UserStore = {
+  loading: true
+}
 
 const User = createSlice({
   name: 'user',
@@ -18,7 +20,5 @@ const User = createSlice({
   initialState,
   extraReducers
 })
-
-export const UserActions = User.actions
 
 export default User
