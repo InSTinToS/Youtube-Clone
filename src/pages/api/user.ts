@@ -1,6 +1,8 @@
+import { NextApiHandler } from 'next'
+
 import { addUser, getUser, updateUser } from 'backend/controllers/user'
 
-export default async function handler(req, res) {
+const handler: NextApiHandler = async (req, res) => {
   switch (req.method) {
     case 'GET':
       return getUser(req, res)
@@ -12,3 +14,5 @@ export default async function handler(req, res) {
       return updateUser(req, res)
   }
 }
+
+export default handler

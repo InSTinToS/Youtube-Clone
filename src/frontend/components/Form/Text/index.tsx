@@ -1,6 +1,6 @@
 import { Container } from './styles'
 
-import { Field, FieldAttributes, FieldProps } from 'formik'
+import { Field, FieldAttributes } from 'formik'
 import React from 'react'
 
 interface Props extends FieldAttributes<any> {}

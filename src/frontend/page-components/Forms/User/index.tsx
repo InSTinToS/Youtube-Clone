@@ -38,10 +38,7 @@ const UserCard = () => {
 
     if (user?._id) {
       const { data } = await put<RES_PUT_User, REQ_PUT_User>('/user', {
-        user: {
-          avatar,
-          _id: user._id
-        }
+        user: { avatar, _id: user._id }
       })
 
       response = data

@@ -1,5 +1,6 @@
 import { Container } from './styles'
 import User from './User'
+import Channels from './Channels'
 
 import ArrayText from 'frontend/components/Form/ArrayText'
 
@@ -11,12 +12,7 @@ const initialValues = {
     avatar:
       'https://yt2.ggpht.com/52bJiKEiq5DSQ4ZRg41TCFB4FAkFL0q2GKCqFlsuP4ssKQhcYnsGmEow7YWWoj5cf1VI2HqsJHY=s88-c-k-c0x00ffffff-no-rj-mo'
   },
-  channels: [
-    {
-      logo: 'https://yt3.ggpht.com/ytc/AKedOLSS3jsxRa4MsKD1ORDR_ETb0KFVQcnbZiYXgJhr8A=s48-c-k-c0x00ffffff-no-rj',
-      name: 'Future House Cloud'
-    }
-  ],
+  channels: [],
   videos: [
     {
       views: 2648,
@@ -35,29 +31,7 @@ const Forms = () => {
     <Container>
       <User />
 
-      <section>
-        <h2>Channels</h2>
-
-        <Formik
-          onSubmit={() => {}}
-          initialValues={{ channels: initialValues.channels }}
-        >
-          {({ values }) => (
-            <Form>
-              <ArrayText
-                values={values}
-                name='channels'
-                fields={[
-                  { name: 'logo', label: 'Logo URL' },
-                  { name: 'name', label: 'Nome' }
-                ]}
-              />
-
-              <button type='submit'>Atualizar</button>
-            </Form>
-          )}
-        </Formik>
-      </section>
+      <Channels />
 
       <section>
         <h2>Videos</h2>

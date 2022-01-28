@@ -19,11 +19,13 @@ const buttonAnimation: ButtonAnimation = {
   success: { backgroundColor: ['#aa4eff', '#0f0', '#aa4eff'] }
 }
 
-const Button = ({ animateVariant = 'default', children }: Props) => (
+const Button = ({ animateVariant = 'default', children, ...props }: Props) => (
   <Container
+    type='submit'
     initial='default'
     animate={animateVariant}
     variants={buttonAnimation}
+    {...props}
   >
     {children}
   </Container>

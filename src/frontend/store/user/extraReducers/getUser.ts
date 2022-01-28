@@ -19,8 +19,6 @@ const getUserThunk = createAsyncThunk<User, GetUserParams>(
 
     if (!callOnlyIfNotExists || !userStore?.user?._id) {
       const { data } = await get<RES_GET_User>('/user')
-      console.log('here', data)
-
       if (data?.user) return data.user
     }
 

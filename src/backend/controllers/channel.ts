@@ -1,7 +1,9 @@
 import { NextRouteType } from 'types/next'
 import Channel, {
+  REQ_DELETE_Channel,
   REQ_POST_Channel,
   REQ_PUT_Channel,
+  RES_DELETE_Channel,
   RES_GET_Channel,
   RES_POST_Channel,
   RES_PUT_Channel
@@ -10,11 +12,11 @@ import Channel, {
 import connectToMongoDB from 'backend/db'
 import { ObjectId } from 'mongodb'
 
-const getChannel: NextRouteType<RES_GET_Channel> = async (_req, res) => {
+const getChannels: NextRouteType<RES_GET_Channel> = async (_req, res) => {
   try {
     let { db } = await connectToMongoDB()
 
-    const channels = await db.collection<Channel[]>('channel').findOne()
+    const channels = await db.collection<Channel>('channels').find().toArray()
 
     return res.json({ channels, success: true })
   } catch (error) {
@@ -22,42 +24,77 @@ const getChannel: NextRouteType<RES_GET_Channel> = async (_req, res) => {
   }
 }
 
-const addChannel: NextRouteType<RES_POST_Channel> = async (req, res) => {
+const addChannels: NextRouteType<RES_POST_Channel> = async (req, res) => {
   try {
+    const { db } = await connectToMongoDB()
     const { channels }: REQ_POST_Channel = req.body
 
-    let { db } = await connectToMongoDB()
+    const newChannels = channels.map(channel => ({
+      _id: new ObjectId(),
+      ...channel
+    }))
 
-    await db
-      .collection<Channel>('channel')
-      .insertMany(
-        channels.map(channel => ({ _id: new ObjectId(), ...channel }))
-      )
+    const { insertedCount, insertedIds } = await db
+      .collection<Channel>('channels')
+      .insertMany(newChannels)
 
-    return res.json({ success: true })
+    const newIds = []
+
+    for (let i = 0; i < insertedCount; i++) newIds.push(insertedIds[i])
+
+    const updatedChannels = await db
+      .collection<Channel>('channels')
+      .find({ _id: { $in: newIds } })
+      .toArray()
+
+    return res.json({ success: true, channels: updatedChannels })
   } catch (error) {
     return res.json({ success: false, message: new Error(error).message })
   }
 }
 
-// const updateChannel: NextRouteType<RES_PUT_Channel> = async (req, res) => {
-//   try {
-//     const { channels }: REQ_PUT_Channel = req.body
+const updateChannels: NextRouteType<RES_PUT_Channel> = async (req, res) => {
+  try {
+    const { db } = await connectToMongoDB()
+    const { channels }: REQ_PUT_Channel = req.body
 
-//     let { db } = await connectToMongoDB()
+    const modifiedValues = []
 
-//     await db
-//       .collection<Channel>('channel')
-//       .findOneAndReplace({ id: channels._id }, { logo: channels.})
+    for (let i = 0; i < channels.length; i++) {
+      const { value } = await db
+        .collection<Channel>('channels')
+        .findOneAndReplace(
+          { _id: new ObjectId(channels[i]._id) },
+          { logo: channels[0].logo, name: channels[0].name },
+          { returnDocument: 'after' }
+        )
 
-//     return res.json({ success: true })
-//   } catch (error) {
-//     return res.json({ success: false, message: new Error(error).message })
-//   }
-// }
+      modifiedValues.push(value)
+    }
 
-export {
-  // getChannel,
-  // updateChannel,
-  addChannel
+    return res.json({ success: true, channels: modifiedValues })
+  } catch (error) {
+    return res.json({ success: false, message: new Error(error).message })
+  }
 }
+
+const removeChannels: NextRouteType<RES_DELETE_Channel> = async (req, res) => {
+  try {
+    const { db } = await connectToMongoDB()
+    const { channelsIds }: REQ_DELETE_Channel = req.body
+
+    const channelsObjectIds = channelsIds.map(channel => new ObjectId(channel))
+
+    console.log(channelsObjectIds)
+
+    const { deletedCount } = await db
+      .collection<Channel>('channels')
+      .deleteMany({ _id: { $in: channelsObjectIds } })
+
+    return res.json({ success: true, deletedCount })
+  } catch (error) {
+    return res.json({ success: false, message: new Error(error).message })
+  }
+}
+
+export { addChannels, getChannels, removeChannels, updateChannels }

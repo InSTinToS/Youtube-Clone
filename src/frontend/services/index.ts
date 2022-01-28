@@ -15,14 +15,19 @@ const post = <Res, Req = undefined>(
 ): Promise<AxiosResponse<Res>> =>
   api.post<Res, AxiosResponse<Res>, Req>(path, data, config)
 
-function put<Res, Req = undefined>(
+const put = <Res, Req = undefined>(
   path: string,
   data: Req,
   config?: AxiosRequestConfig<Req>
-): Promise<AxiosResponse<Res>> {
-  return api.put<Res, AxiosResponse<Res>, Req>(path, data, config)
-}
+): Promise<AxiosResponse<Res>> =>
+  api.put<Res, AxiosResponse<Res>, Req>(path, data, config)
 
-export { post, put, get }
+const remove = <Res, Req = undefined>(
+  path: string,
+  config?: AxiosRequestConfig<Req>
+): Promise<AxiosResponse<Res>> =>
+  api.delete<Res, AxiosResponse<Res>, Req>(path, config)
+
+export { post, put, get, remove }
 
 export default api
