@@ -1,6 +1,8 @@
 import Channel, {
+  REQ_DELETE_Channel,
   REQ_POST_Channel,
   REQ_PUT_Channel,
+  RES_DELETE_Channel,
   RES_GET_Channel,
   RES_POST_Channel,
   RES_PUT_Channel
@@ -8,13 +10,18 @@ import Channel, {
 
 import { get, post, put, remove } from 'frontend/services'
 
-import Button from 'frontend/components/Form/Button'
+import getChannelsThunk from 'frontend/store/channels/extraReducers/getChannels'
+import { ChannelStore } from 'frontend/store/channels'
+
+import Button, { ButtonVariants } from 'frontend/components/Form/Button'
 import ArrayText, { Ref as ArrayTextRef } from 'frontend/components/Form/ArrayText'
 import Presence from 'frontend/components/Presence'
 
+import { RootStore } from 'frontend/types/redux'
+
 import { Form, Formik } from 'formik'
-import { ObjectId } from 'mongodb'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
 const arrayTextFields = [
   { name: 'logo', label: 'Logo URL' },
@@ -22,73 +29,84 @@ const arrayTextFields = [
 ]
 
 const ChannelCard = () => {
+  const channelsStore = useSelector<RootStore, ChannelStore>(
+    ({ channelsStore }) => channelsStore
+  )
+
+  const [animateButton, setAnimateButton] = useState<ButtonVariants>('default')
   const [channels, setChannels] = useState<Channel[]>()
 
   const arrayTextRef = useRef<ArrayTextRef>(null)
 
-  const onChannelSubmit = async (values: any) => {
-    const valuesToPost = values.channels.filter(channel => !channel._id)
-    const valuesToUpdate = arrayTextRef.current.updatedIds
-    console.log(valuesToUpdate)
+  const dispatch = useDispatch()
 
-    if (valuesToPost.length > 0) {
+  const onChannelSubmit = async (values: { channels: Channel[] }) => {
+    setChannels(undefined)
+    setAnimateButton('default')
+
+    let resSuccess
+    const idsToRemove = arrayTextRef.current.removedIds
+    const valuesToUpdate = arrayTextRef.current.updatedValues
+    const valuesToPost = values.channels.filter(channel => !channel._id)
+
+    if (idsToRemove?.length > 0) {
+      const { data } = await remove<RES_DELETE_Channel, REQ_DELETE_Channel>(
+        '/channel',
+        { data: { channelsIds: idsToRemove } }
+      )
+
+      resSuccess = data.success
+    }
+
+    if (valuesToPost?.length > 0) {
       const { data } = await post<RES_POST_Channel, REQ_POST_Channel>(
         '/channel',
         { channels: valuesToPost }
       )
 
-      setChannels(prev =>
-        prev ? [...prev, ...data.channels] : [...data.channels]
-      )
+      resSuccess = resSuccess === false ? false : data.success
     }
 
-    if (valuesToUpdate.length > 0) {
+    if (valuesToUpdate?.length > 0) {
       const { data } = await put<RES_PUT_Channel, REQ_PUT_Channel>('/channel', {
         channels: valuesToUpdate
       })
 
-      setChannels(prev =>
-        prev ? [...prev, ...data.channels] : [...data.channels]
-      )
+      resSuccess = resSuccess === false ? false : data.success
     }
+
+    setAnimateButton(resSuccess ? 'success' : 'failed')
+    dispatch(getChannelsThunk({ callOnlyIfNotExists: false }))
   }
-
-  const removeChannels = async () => {
-    const idsToRemove = arrayTextRef.current.removedIds
-
-    idsToRemove &&
-      (await remove('/channel', { data: { channelsIds: idsToRemove } }))
-  }
-
-  const getData = useCallback(async () => {
-    const { data } = await get<RES_GET_Channel>('/channel')
-    setChannels(data.channels)
-  }, [])
 
   useEffect(() => {
-    getData()
-  }, [])
+    setChannels(channelsStore.channels)
+  }, [channelsStore.channels])
+
+  useEffect(() => {
+    dispatch(getChannelsThunk({ callOnlyIfNotExists: false }))
+  }, [dispatch])
 
   return (
     <section>
       <h2>Channels</h2>
 
-      <Presence condition={!!channels}>
-        <Formik onSubmit={onChannelSubmit} initialValues={{ channels }}>
-          {({ values }) => (
-            <Form>
+      <Formik onSubmit={onChannelSubmit} initialValues={{ channels }}>
+        {({ values }) => (
+          <Form>
+            <Presence condition={!!channels}>
               <ArrayText
                 name='channels'
                 values={values}
                 ref={arrayTextRef}
                 fields={arrayTextFields}
               />
+            </Presence>
 
-              <Button onClick={removeChannels}>Atualizar</Button>
-            </Form>
-          )}
-        </Formik>
-      </Presence>
+            <Button animateVariant={animateButton}>Atualizar</Button>
+          </Form>
+        )}
+      </Formik>
     </section>
   )
 }

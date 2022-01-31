@@ -1,6 +1,8 @@
 import { Container } from './styles'
 import Text from '../Text'
 
+import Channel from 'types/routes/channel'
+
 import add from 'frontend/assets/icons/add.png'
 import minus from 'frontend/assets/icons/minus.png'
 
@@ -15,7 +17,7 @@ type OnMinusButtonClick = (
 
 export interface Ref {
   removedIds: ObjectId[]
-  updatedIds: any[]
+  updatedValues: any[]
 }
 
 interface Props {
@@ -23,22 +25,18 @@ interface Props {
   name: string
   legend?: string
   removeHandler?: (_id: ObjectId) => Promise<void>
-  fields: {
-    name: string
-    label: string
-    placeholder?: string
-  }[]
+  fields: { name: string; label: string; placeholder?: string }[]
 }
 
 const ArrayText = React.forwardRef<Ref, Props>(
   ({ name, values, fields, legend }, ref) => {
+    const [updatedValues, setUpdatedValues] = useState<Channel[]>()
     const [removedIds, setRemovedIds] = useState<ObjectId[]>()
-    const [updatedIds, setUpdatedIds] = useState<any[]>()
 
     const onMinusButtonClick: OnMinusButtonClick = (arrayHelpers, index) => {
-      arrayHelpers.remove(index)
-
       const idToRemove = values[name][index]._id
+
+      arrayHelpers.remove(index)
 
       idToRemove &&
         setRemovedIds(prev => (prev ? [...prev, idToRemove] : [idToRemove]))
@@ -55,53 +53,54 @@ const ArrayText = React.forwardRef<Ref, Props>(
       } else arrayHelpers.push(' ')
     }
 
-    useImperativeHandle(ref, () => ({ removedIds, updatedIds }), [removedIds])
+    const onTextClick = (index: number) => {
+      const haveId = values[name][index]._id
+      const alreadyClicked = !updatedValues?.find(
+        oldUpdated => oldUpdated._id === values[name][index]._id
+      )
+
+      if (alreadyClicked && haveId)
+        setUpdatedValues(prev =>
+          prev ? [...prev, values[name][index]] : [values[name][index]]
+        )
+
+      console.log(values[name][index])
+    }
+
+    useImperativeHandle(ref, () => ({ removedIds, updatedValues }), [
+      removedIds,
+      updatedValues
+    ])
 
     return (
-      <FieldArray
-        name={name}
-        render={arrayHelpers => (
+      <FieldArray name={name}>
+        {arrayHelpers => (
           <Container ref={ref as any}>
             <legend>{legend}</legend>
 
             <ul>
-              {values[name] &&
-                values[name].map((_, index) => (
-                  <li key={index}>
-                    <div>
-                      {fields.length > 1 ? (
-                        fields.map((field, fieldIndex) => (
-                          <Text
-                            key={fieldIndex}
-                            label={field.label}
-                            placeholder={field.placeholder}
-                            name={`${name}[${index}].${field.name}`}
-                            onClick={() =>
-                              setUpdatedIds(prev =>
-                                prev
-                                  ? [...prev, values[name][index]]
-                                  : [values[name][index]]
-                              )
-                            }
-                          />
-                        ))
-                      ) : (
-                        <Text
-                          label={fields[0].label}
-                          name={`${fields[0].name}[${index}]`}
-                          placeholder={fields[0].placeholder}
-                        />
-                      )}
-                    </div>
-
-                    <button type='button'>
-                      <img
-                        src={minus}
-                        onClick={() => onMinusButtonClick(arrayHelpers, index)}
+              {values[name]?.map((_, index) => (
+                <li key={index}>
+                  <div>
+                    {fields.map((field, fieldIndex) => (
+                      <Text
+                        key={fieldIndex}
+                        label={field.label}
+                        placeholder={field.placeholder}
+                        onClick={() => onTextClick(index)}
+                        name={`${name}[${index}].${field.name}`}
                       />
-                    </button>
-                  </li>
-                ))}
+                    ))}
+                  </div>
+
+                  <button type='button'>
+                    <img
+                      src={minus}
+                      onClick={() => onMinusButtonClick(arrayHelpers, index)}
+                    />
+                  </button>
+                </li>
+              ))}
 
               <div id='add'>
                 <button
@@ -114,7 +113,7 @@ const ArrayText = React.forwardRef<Ref, Props>(
             </ul>
           </Container>
         )}
-      />
+      </FieldArray>
     )
   }
 )

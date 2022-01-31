@@ -85,8 +85,6 @@ const removeChannels: NextRouteType<RES_DELETE_Channel> = async (req, res) => {
 
     const channelsObjectIds = channelsIds.map(channel => new ObjectId(channel))
 
-    console.log(channelsObjectIds)
-
     const { deletedCount } = await db
       .collection<Channel>('channels')
       .deleteMany({ _id: { $in: channelsObjectIds } })

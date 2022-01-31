@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
 export const Container = styled.label`
+  width: 100%;
   height: 54px;
   font-size: 1.6rem;
 

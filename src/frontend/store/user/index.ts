@@ -1,5 +1,4 @@
 import extraReducers from './extraReducers'
-import reducers from './reducers'
 
 import UserType from 'types/routes/user'
 
@@ -16,7 +15,7 @@ export const initialState: UserStore = {
 
 const User = createSlice({
   name: 'user',
-  reducers,
+  reducers: {},
   initialState,
   extraReducers
 })
