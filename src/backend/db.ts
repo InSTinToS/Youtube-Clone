@@ -4,7 +4,9 @@ const connectToMongoDB = async () => {
   const client = new MongoClient(process.env.URI)
   const connection = await client.connect()
 
-  return { db: connection.db('youtubeClone') }
+  const db = connection.db(process.env.DB_NAME)
+
+  return { db }
 }
 
 export default connectToMongoDB
