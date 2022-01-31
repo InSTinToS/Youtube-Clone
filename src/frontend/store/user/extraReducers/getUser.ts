@@ -18,7 +18,7 @@ const getUserThunk = createAsyncThunk<User, GetUserParams>(
     const { userStore } = getState() as RootStore
 
     if (!callOnlyIfNotExists || !userStore?.user?._id) {
-      const { data } = await get<RES_GET_User>('/user')
+      const { data } = await get<RES_GET_User>('/users')
       if (data?.user) return data.user
     }
 

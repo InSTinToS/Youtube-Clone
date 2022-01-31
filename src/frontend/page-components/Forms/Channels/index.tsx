@@ -51,7 +51,7 @@ const ChannelCard = () => {
 
     if (idsToRemove?.length > 0) {
       const { data } = await remove<RES_DELETE_Channel, REQ_DELETE_Channel>(
-        '/channel',
+        '/channels',
         { data: { channelsIds: idsToRemove } }
       )
 
@@ -60,7 +60,7 @@ const ChannelCard = () => {
 
     if (valuesToPost?.length > 0) {
       const { data } = await post<RES_POST_Channel, REQ_POST_Channel>(
-        '/channel',
+        '/channels',
         { channels: valuesToPost }
       )
 
@@ -68,9 +68,12 @@ const ChannelCard = () => {
     }
 
     if (valuesToUpdate?.length > 0) {
-      const { data } = await put<RES_PUT_Channel, REQ_PUT_Channel>('/channel', {
-        channels: valuesToUpdate
-      })
+      const { data } = await put<RES_PUT_Channel, REQ_PUT_Channel>(
+        '/channels',
+        {
+          channels: valuesToUpdate
+        }
+      )
 
       resSuccess = resSuccess === false ? false : data.success
     }

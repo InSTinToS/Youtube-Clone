@@ -18,7 +18,7 @@ const getChannelsThunk = createAsyncThunk<Channel[], GetChannelParams>(
     const { channelsStore } = getState() as RootStore
 
     if (!callOnlyIfNotExists || channelsStore?.channels.length === 0) {
-      const { data } = await get<RES_GET_Channel>('/channel')
+      const { data } = await get<RES_GET_Channel>('/channels')
 
       if (data?.channels) return data.channels
     }

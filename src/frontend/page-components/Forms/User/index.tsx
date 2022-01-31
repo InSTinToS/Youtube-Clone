@@ -37,13 +37,13 @@ const UserCard = () => {
     setAnimateVariant('default')
 
     if (user?._id) {
-      const { data } = await put<RES_PUT_User, REQ_PUT_User>('/user', {
+      const { data } = await put<RES_PUT_User, REQ_PUT_User>('/users', {
         user: { avatar, _id: user._id }
       })
 
       response = data
     } else {
-      const { data } = await post<RES_POST_User, REQ_POST_User>('/user', {
+      const { data } = await post<RES_POST_User, REQ_POST_User>('/users', {
         user: { avatar }
       })
 
