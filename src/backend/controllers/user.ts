@@ -13,7 +13,7 @@ import { ObjectId } from 'mongodb'
 const getUser: NextRouteType<RES_GET_User> = async (_req, res) => {
   try {
     let { db } = await connectToMongoDB()
-    const user = await db.collection<User>('user').findOne()
+    const user = await db.collection<User>('users').findOne()
 
     return res.json({ user, success: true })
   } catch (error) {
@@ -27,10 +27,10 @@ const addUser: NextRouteType<RES_POST_User> = async (req, res) => {
     let { db } = await connectToMongoDB()
     const newId = new ObjectId()
 
-    await db.collection<User>('user').insertOne({ _id: newId, ...user })
+    await db.collection<User>('users').insertOne({ _id: newId, ...user })
 
     const updatedUser = await db
-      .collection<User>('user')
+      .collection<User>('users')
       .findOne({ _id: newId })
 
     return res.json({ success: true, user: updatedUser })
@@ -45,7 +45,7 @@ const updateUser: NextRouteType<RES_PUT_User> = async (req, res) => {
     let { db } = await connectToMongoDB()
 
     const updatedUser = await db
-      .collection<User>('user')
+      .collection<User>('users')
       .findOneAndReplace(
         { _id: new ObjectId(user._id) },
         { avatar: user.avatar },
