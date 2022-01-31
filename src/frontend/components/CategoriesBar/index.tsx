@@ -29,22 +29,20 @@ const CategoriesBar = ({ sidebarOpen }: Props) => {
     selected !== category && setSelected(category)
   }
 
-  const handleLeftArrow = () => {
-    setX(x => x + 200)
-  }
+  const handleLeftArrow = () => setX(x => x + 200)
 
-  const handleRightArrow = () => {
-    setX(x => x - 200)
-  }
+  const handleRightArrow = () => setX(x => x - 200)
 
-  const handleDragEnd = (_, { offset }) => {
-    setX(x => x + offset.x)
-  }
+  const handleDragEnd = (_, { offset }) => setX(x => x + offset.x)
 
   useEffect(() => {
-    setMaxSize(-ulRef.current?.clientWidth + categoriesRef.current?.clientWidth)
+    const ul = ulRef.current?.clientWidth
+    const categories = categoriesRef.current?.clientWidth
+
+    if (categories > ul) setMaxSize(0)
+    else setMaxSize(-ul + categories)
   }, [ulRef.current?.clientWidth, categoriesRef.current?.clientWidth])
-  ;('https://yt3.ggpht.com/52bJiKEiq5DSQ4ZRg41TCFB4FAkFL0q2GKCqFlsuP4ssKQhcYnsGmEow7YWWoj5cf1VI2HqsJHY=s88-c-k-c0x00ffffff-no-rj-mo')
+
   useEffect(() => {
     if (x < maxSize) setX(maxSize)
     if (x > 0) setX(0)
@@ -61,10 +59,10 @@ const CategoriesBar = ({ sidebarOpen }: Props) => {
         <motion.ul
           drag='x'
           ref={ulRef}
-          animate={{ x, transition: { type: 'tween', duration: 0.2 } }}
           dragElastic={0.05}
           onDragEnd={handleDragEnd}
           dragConstraints={categoriesRef}
+          animate={{ x, transition: { type: 'tween', duration: 0.2 } }}
         >
           {categories.map(category => (
             <Category
@@ -78,12 +76,7 @@ const CategoriesBar = ({ sidebarOpen }: Props) => {
         </motion.ul>
       </Categories>
 
-      <RightArrow
-        id='right'
-        type='button'
-        visible={x > maxSize}
-        onClick={handleRightArrow}
-      >
+      <RightArrow visible={x > maxSize} onClick={handleRightArrow}>
         <Arrow />
         <Shadow />
       </RightArrow>
