@@ -1,6 +1,7 @@
 import { Container } from './styles'
 import User from './User'
 import Channels from './Channels'
+import Categories from './Categories'
 
 import ArrayText from 'frontend/components/Form/ArrayText'
 
@@ -33,6 +34,8 @@ const Forms = () => {
 
       <Channels />
 
+      <Categories />
+
       <section>
         <h2>Videos</h2>
 
@@ -52,27 +55,6 @@ const Forms = () => {
                   { name: 'thumbnail', label: 'Thumbnail' },
                   { name: 'channel', label: 'Channel' }
                 ]}
-              />
-
-              <button type='submit'>Atualizar</button>
-            </Form>
-          )}
-        </Formik>
-      </section>
-
-      <section>
-        <h2>Categories</h2>
-
-        <Formik
-          onSubmit={() => {}}
-          initialValues={{ categories: initialValues.categories }}
-        >
-          {({ values }) => (
-            <Form>
-              <ArrayText
-                values={values}
-                name='categories'
-                fields={[{ name: 'categories', label: 'Category' }]}
               />
 
               <button type='submit'>Atualizar</button>

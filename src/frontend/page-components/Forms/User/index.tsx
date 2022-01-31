@@ -68,15 +68,15 @@ const UserCard = () => {
     <section>
       <h2>User</h2>
 
-      <Formik onSubmit={onUserSubmit} initialValues={{ avatar: '' }}>
-        <Form>
-          <Presence condition={!userStore.loading}>
+      <Presence condition={!userStore.loading}>
+        <Formik onSubmit={onUserSubmit} initialValues={{ avatar: '' }}>
+          <Form>
             <Text name='avatar' label='Avatar URL' placeholder={user?.avatar} />
-          </Presence>
 
-          <Button animateVariant={animateVariant}>Atualizar</Button>
-        </Form>
-      </Formik>
+            <Button animateVariant={animateVariant}>Atualizar</Button>
+          </Form>
+        </Formik>
+      </Presence>
     </section>
   )
 }

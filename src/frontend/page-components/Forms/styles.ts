@@ -24,7 +24,7 @@ export const Container = styled.main`
   }
 
   section {
-    width: 80%;
+    width: min(80%, 800px);
 
     & + * {
       margin-top: 24px;
