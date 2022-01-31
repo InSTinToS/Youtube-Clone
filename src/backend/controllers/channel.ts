@@ -65,7 +65,7 @@ const updateChannels: NextRouteType<RES_PUT_Channel> = async (req, res) => {
         .collection<Channel>('channels')
         .findOneAndReplace(
           { _id: new ObjectId(channels[i]._id) },
-          { logo: channels[0].logo, name: channels[0].name },
+          { logo: channels[i].logo, name: channels[i].name },
           { returnDocument: 'after' }
         )
 
