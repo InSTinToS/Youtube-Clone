@@ -21,7 +21,7 @@ import ArrayText from 'frontend/components/Form/ArrayText'
 import { RootStore } from 'frontend/types/redux'
 
 import { Form, Formik } from 'formik'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 const arrayTextFields = [
@@ -38,6 +38,8 @@ const VideoCard = () => {
 
   const [videos, setVideos] = useState<Video[]>()
   const [animateButton, setAnimateButton] = useState<ButtonVariants>('default')
+
+  const sectionRef = useRef<HTMLDivElement>(null)
 
   const dispatch = useDispatch()
 
@@ -82,6 +84,10 @@ const VideoCard = () => {
   }
 
   useEffect(() => {
+    sectionRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [!!videos])
+
+  useEffect(() => {
     setVideos(videosStore.videos)
   }, [videosStore.videos])
 
@@ -90,7 +96,7 @@ const VideoCard = () => {
   }, [dispatch])
 
   return (
-    <section>
+    <section ref={sectionRef}>
       <h2>Videos</h2>
 
       <Presence condition={!!videos}>
