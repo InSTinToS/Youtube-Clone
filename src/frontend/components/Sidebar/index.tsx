@@ -1,6 +1,8 @@
 import { Container, Content, Footer, SidebarItem, UlTitle } from './styles'
 import Presence from '../Presence'
 
+import { ChannelStore } from 'frontend/store/channels'
+
 import useWindowDimensions from 'frontend/hooks/useWindowDimensions'
 
 import {
@@ -18,9 +20,12 @@ import {
   Videos
 } from 'frontend/assets/icons'
 
+import { RootStore } from 'frontend/types/redux'
+
 import { Transition, Variants } from 'framer-motion'
 import { user } from 'frontend/fakeData/user'
 import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 
 const sidebarData = {
   default: [
@@ -59,6 +64,9 @@ const appearAnimation: Variants = {
 }
 
 const Sidebar = ({ open }: Props) => {
+  const { channels } = useSelector<RootStore, ChannelStore>(
+    ({ channelsStore }) => channelsStore
+  )
   const { innerWidth } = useWindowDimensions()
 
   const [selected, setSelected] = useState('Início')
@@ -111,18 +119,31 @@ const Sidebar = ({ open }: Props) => {
               <UlTitle>inscrições</UlTitle>
 
               <ul>
-                {user.subscriptions.map(({ name, logo }, index) => (
-                  <SidebarItem
-                    open={open}
-                    key={index}
-                    isSelected={selected === name}
-                    onClick={() => setSelected(name)}
-                  >
-                    <button>
-                      <img src={logo} /> <span>{name}</span>
-                    </button>
-                  </SidebarItem>
-                ))}
+                {channels
+                  ? channels?.map(({ name, logo }, index) => (
+                      <SidebarItem
+                        open={open}
+                        key={index}
+                        isSelected={selected === name}
+                        onClick={() => setSelected(name)}
+                      >
+                        <button>
+                          <img src={logo} /> <span>{name}</span>
+                        </button>
+                      </SidebarItem>
+                    ))
+                  : user.subscriptions.map(({ name, logo }, index) => (
+                      <SidebarItem
+                        open={open}
+                        key={index}
+                        isSelected={selected === name}
+                        onClick={() => setSelected(name)}
+                      >
+                        <button>
+                          <img src={logo} /> <span>{name}</span>
+                        </button>
+                      </SidebarItem>
+                    ))}
               </ul>
 
               <hr />
