@@ -1,3 +1,5 @@
+import Channel from './channel'
+
 import { DefaultResType } from 'types/next'
 
 import { ObjectId } from 'mongodb'
@@ -8,6 +10,7 @@ interface Video {
   title: string
   thumbnail: string
   channelName: string
+  channelInfo?: Channel
 }
 
 export interface REQ_GET_Video {}

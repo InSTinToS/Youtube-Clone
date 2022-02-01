@@ -8,6 +8,7 @@ import Video, {
   RES_POST_Video,
   RES_PUT_Video
 } from 'types/routes/video'
+import Channel from 'types/routes/channel'
 
 import connectToMongoDB from 'backend/db'
 import { ObjectId } from 'mongodb'
@@ -16,7 +17,19 @@ const getVideos: NextRouteType<RES_GET_Video> = async (_req, res) => {
   try {
     let { db } = await connectToMongoDB()
 
-    const videos = await db.collection<Video>('videos').find().toArray()
+    const videos: Video[] = await db
+      .collection<Video>('videos')
+      .aggregate<Video>([
+        {
+          $lookup: {
+            from: 'channels',
+            localField: 'channelName',
+            foreignField: 'name',
+            as: 'channelInfo'
+          }
+        }
+      ])
+      .toArray()
 
     return res.json({ videos, success: true })
   } catch (error) {

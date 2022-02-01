@@ -3,9 +3,9 @@ import { DefaultResType } from 'types/next'
 import { ObjectId } from 'mongodb'
 
 interface Channel {
-  _id: ObjectId
   logo: string
   name: string
+  _id: ObjectId
 }
 
 export interface REQ_GET_Channel {}
