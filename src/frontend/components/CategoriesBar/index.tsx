@@ -7,23 +7,34 @@ import {
   Shadow
 } from './styles'
 
+import getCategoriesThunk from 'frontend/store/categories/extraReducers/getCategories'
+import { CategoryStore } from 'frontend/store/categories'
+
 import { Arrow } from 'frontend/assets/icons'
 
+import { RootStore } from 'frontend/types/redux'
+
 import { motion } from 'framer-motion'
-import { categories } from 'frontend/fakeData/categories'
 import React, { useEffect, useRef, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
 interface Props {
   sidebarOpen: boolean
 }
 
 const CategoriesBar = ({ sidebarOpen }: Props) => {
+  const categoriesStore = useSelector<RootStore, CategoryStore>(
+    ({ categoriesStore }) => categoriesStore
+  )
+
   const ulRef = useRef<HTMLUListElement>(null)
   const categoriesRef = useRef<HTMLDivElement>(null)
 
   const [x, setX] = useState(0)
   const [maxSize, setMaxSize] = useState(0)
   const [selected, setSelected] = useState('Tudo')
+
+  const dispatch = useDispatch()
 
   const handleCategorySelect = (category: string) => {
     selected !== category && setSelected(category)
@@ -48,6 +59,10 @@ const CategoriesBar = ({ sidebarOpen }: Props) => {
     if (x > 0) setX(0)
   }, [x, maxSize])
 
+  useEffect(() => {
+    dispatch(getCategoriesThunk({}))
+  }, [dispatch])
+
   return (
     <Container sidebarOpen={sidebarOpen}>
       <LeftArrow visible={x !== 0} onClick={handleLeftArrow}>
@@ -64,13 +79,13 @@ const CategoriesBar = ({ sidebarOpen }: Props) => {
           dragConstraints={categoriesRef}
           animate={{ x, transition: { type: 'tween', duration: 0.2 } }}
         >
-          {categories.map(category => (
+          {categoriesStore?.categories?.map(({ _id, label }) => (
             <Category
-              key={category}
-              selected={selected === category}
-              onClick={() => handleCategorySelect(category)}
+              key={Number(_id)}
+              selected={selected === label}
+              onClick={() => handleCategorySelect(label)}
             >
-              <button type='button'>{category}</button>
+              <button type='button'>{label}</button>
             </Category>
           ))}
         </motion.ul>

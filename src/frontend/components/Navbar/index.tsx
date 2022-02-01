@@ -23,7 +23,6 @@ import {
 
 import { RootStore } from 'frontend/types/redux'
 
-import { user } from 'frontend/fakeData/user'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -77,7 +76,7 @@ const Navbar = ({ onHamburgerClick }: Props) => {
 
         <Bell />
 
-        <img id='avatar' src={userStore.user?.avatar || user.avatar} />
+        <img id='avatar' src={userStore.user?.avatar} />
       </UserTools>
     </Container>
   )

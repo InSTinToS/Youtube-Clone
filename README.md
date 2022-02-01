@@ -1,7 +1,7 @@
 ## Template para Next
 
 # Dotenv
-  * .env is inside next.config.js
+  * .env is inside next.config.js or use .env.local
   * will change in build time (run yarn dev to see changes)
 
 # Jest and Cypress

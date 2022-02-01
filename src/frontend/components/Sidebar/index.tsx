@@ -2,6 +2,7 @@ import { Container, Content, Footer, SidebarItem, UlTitle } from './styles'
 import Presence from '../Presence'
 
 import { ChannelStore } from 'frontend/store/channels'
+import getChannelsThunk from 'frontend/store/channels/extraReducers/getChannels'
 
 import useWindowDimensions from 'frontend/hooks/useWindowDimensions'
 
@@ -23,9 +24,23 @@ import {
 import { RootStore } from 'frontend/types/redux'
 
 import { Transition, Variants } from 'framer-motion'
-import { user } from 'frontend/fakeData/user'
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+
+interface Props {
+  open: boolean
+}
+
+const transition: Transition = {
+  type: 'tween',
+  duration: 0.3
+}
+
+const appearAnimation: Variants = {
+  initial: { x: -240 },
+  exit: { x: [0, -240] },
+  enter: { x: [-240, 0] }
+}
 
 const sidebarData = {
   default: [
@@ -48,21 +63,6 @@ const sidebarData = {
   ]
 }
 
-interface Props {
-  open: boolean
-}
-
-const transition: Transition = {
-  type: 'tween',
-  duration: 0.3
-}
-
-const appearAnimation: Variants = {
-  initial: { x: -240 },
-  exit: { x: [0, -240] },
-  enter: { x: [-240, 0] }
-}
-
 const Sidebar = ({ open }: Props) => {
   const { channels } = useSelector<RootStore, ChannelStore>(
     ({ channelsStore }) => channelsStore
@@ -70,6 +70,12 @@ const Sidebar = ({ open }: Props) => {
   const { innerWidth } = useWindowDimensions()
 
   const [selected, setSelected] = useState('Início')
+
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(getChannelsThunk({}))
+  }, [dispatch])
 
   return (
     <Container>
@@ -119,31 +125,18 @@ const Sidebar = ({ open }: Props) => {
               <UlTitle>inscrições</UlTitle>
 
               <ul>
-                {channels
-                  ? channels?.map(({ name, logo }, index) => (
-                      <SidebarItem
-                        open={open}
-                        key={index}
-                        isSelected={selected === name}
-                        onClick={() => setSelected(name)}
-                      >
-                        <button>
-                          <img src={logo} /> <span>{name}</span>
-                        </button>
-                      </SidebarItem>
-                    ))
-                  : user.subscriptions.map(({ name, logo }, index) => (
-                      <SidebarItem
-                        open={open}
-                        key={index}
-                        isSelected={selected === name}
-                        onClick={() => setSelected(name)}
-                      >
-                        <button>
-                          <img src={logo} /> <span>{name}</span>
-                        </button>
-                      </SidebarItem>
-                    ))}
+                {channels?.map(({ name, logo }, index) => (
+                  <SidebarItem
+                    open={open}
+                    key={index}
+                    isSelected={selected === name}
+                    onClick={() => setSelected(name)}
+                  >
+                    <button>
+                      <img src={logo} /> <span>{name}</span>
+                    </button>
+                  </SidebarItem>
+                ))}
               </ul>
 
               <hr />

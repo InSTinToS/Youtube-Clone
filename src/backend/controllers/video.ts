@@ -8,7 +8,6 @@ import Video, {
   RES_POST_Video,
   RES_PUT_Video
 } from 'types/routes/video'
-import Channel from 'types/routes/channel'
 
 import connectToMongoDB from 'backend/db'
 import { ObjectId } from 'mongodb'

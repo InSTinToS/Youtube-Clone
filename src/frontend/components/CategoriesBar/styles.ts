@@ -66,7 +66,7 @@ export const LeftArrow = styled(ArrowButton)`
 `
 
 export const RightArrow = styled(ArrowButton)`
-  right: -10px;
+  right: 0px;
   transform: translateY(-50%);
 `
 
