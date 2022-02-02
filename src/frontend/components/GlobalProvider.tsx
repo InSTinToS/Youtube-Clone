@@ -3,6 +3,8 @@ import GlobalStyle from 'frontend/styles'
 
 import store from 'frontend/store'
 
+import { ApolloProvider } from '@apollo/client'
+import client from 'frontend/../../apollo-client'
 import { ReactNode } from 'react'
 import { Provider } from 'react-redux'
 import { ThemeProvider } from 'styled-components'
@@ -13,13 +15,15 @@ interface Props {
 
 const GlobalProvider = ({ children }: Props) => {
   return (
-    <Provider store={store}>
-      <ThemeProvider theme={theme}>
-        <GlobalStyle />
+    <ApolloProvider client={client}>
+      <Provider store={store}>
+        <ThemeProvider theme={theme}>
+          <GlobalStyle />
 
-        {children}
-      </ThemeProvider>
-    </Provider>
+          {children}
+        </ThemeProvider>
+      </Provider>
+    </ApolloProvider>
   )
 }
 
