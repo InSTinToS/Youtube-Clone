@@ -1,8 +1,8 @@
 import { Container, Content, Footer, SidebarItem, UlTitle } from './styles'
 import Presence from '../Presence'
 
-import { ChannelStore } from 'frontend/store/channels'
 import getChannelsThunk from 'frontend/store/channels/extraReducers/getChannels'
+import SidebarStore from 'frontend/store/sidebar'
 
 import useWindowDimensions from 'frontend/hooks/useWindowDimensions'
 
@@ -23,23 +23,20 @@ import {
 
 import { RootStore } from 'frontend/types/redux'
 
-import { Transition, Variants } from 'framer-motion'
+import { Variants } from 'framer-motion'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-interface Props {
-  open: boolean
-}
-
-const transition: Transition = {
-  type: 'tween',
-  duration: 0.3
-}
-
 const appearAnimation: Variants = {
   initial: { x: -240 },
-  exit: { x: [0, -240] },
-  enter: { x: [-240, 0] }
+  exit: {
+    x: [0, -240],
+    transition: { type: 'tween', duration: 0.3 }
+  },
+  enter: {
+    x: [-240, 0],
+    transition: { type: 'tween', duration: 0.3 }
+  }
 }
 
 const sidebarData = {
@@ -63,34 +60,39 @@ const sidebarData = {
   ]
 }
 
-const Sidebar = ({ open }: Props) => {
-  const { channels } = useSelector<RootStore, ChannelStore>(
-    ({ channelsStore }) => channelsStore
-  )
-  const { innerWidth } = useWindowDimensions()
+const Sidebar = () => {
+  const {
+    sidebarStore: { open },
+    channelsStore: { channels }
+  } = useSelector<RootStore, RootStore>(store => store)
 
   const [selected, setSelected] = useState('Início')
 
   const dispatch = useDispatch()
+  const { innerWidth } = useWindowDimensions()
 
   useEffect(() => {
     dispatch(getChannelsThunk({}))
   }, [dispatch])
 
+  useEffect(() => {
+    dispatch(SidebarStore.actions.toggleSidebar({ open: innerWidth >= 800 }))
+  }, [innerWidth])
+
   return (
-    <Container>
+    <Container data-testid='sidebar'>
       <Presence
         condition={open}
-        transition={transition}
         variants={appearAnimation}
         withPresence={innerWidth < 800}
+        presenceProps={{ initial: false }}
       >
         <Content open={open}>
           <ul>
             {sidebarData.default.map(({ icon: Icon, label }) => (
               <SidebarItem
-                open={open}
                 key={label}
+                open={open}
                 isSelected={selected === label}
                 onClick={() => setSelected(label)}
               >
@@ -108,8 +110,8 @@ const Sidebar = ({ open }: Props) => {
               <ul>
                 {sidebarData.others.map(({ icon: Icon, label }) => (
                   <SidebarItem
-                    open={open}
                     key={label}
+                    open={open}
                     isSelected={selected === label}
                     onClick={() => setSelected(label)}
                   >

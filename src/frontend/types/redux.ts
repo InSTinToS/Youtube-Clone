@@ -6,7 +6,7 @@ import {
   PayloadAction
 } from '@reduxjs/toolkit'
 
-export type Reducer<T> = CaseReducer<T, PayloadAction<Partial<T>>>
+export type Reducer<State> = CaseReducer<State, PayloadAction<Partial<State>>>
 
 export type ExtraReducers<State> = (
   _builder: ActionReducerMapBuilder<State>

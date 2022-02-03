@@ -5,10 +5,24 @@ interface WindowDimension {
   innerHeight?: number
 }
 
+const debounce = <Args, Return>(func: (args: Args) => Return, wait: number) => {
+  let timeout: NodeJS.Timeout
+
+  return (args: Args) => {
+    clearTimeout(timeout)
+
+    timeout = setTimeout(() => {
+      clearTimeout(timeout)
+
+      func(args)
+    }, wait)
+  }
+}
+
 const useWindowDimensions = (): WindowDimension => {
   const [dimensions, setDimensions] = useState({
     innerHeight: undefined,
-    innerWidth: undefined
+    innerWidth: window.innerWidth
   })
 
   useEffect(() => {
@@ -21,7 +35,10 @@ const useWindowDimensions = (): WindowDimension => {
 
     resize()
 
-    window.addEventListener('resize', resize)
+    window.addEventListener(
+      'resize',
+      debounce<WindowEventMap['resize'], void>(resize, 300)
+    )
 
     return () => {
       window.removeEventListener('resize', resize)

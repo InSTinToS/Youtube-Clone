@@ -1,29 +1,28 @@
 import Head from 'next/head'
 import { useRouter } from 'next/dist/client/router'
+import dynamic from 'next/dynamic'
 
 import { Button, Container } from './styles'
 import Content from './Content'
 
-import useWindowDimensions from 'frontend/hooks/useWindowDimensions'
+import SidebarStore from 'frontend/store/sidebar'
 
-import Sidebar from 'frontend/components/Sidebar'
 import Navbar from 'frontend/components/Navbar'
 import CategoriesBar from 'frontend/components/CategoriesBar'
 
-import { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
+
+const Sidebar = dynamic(() => import('frontend/components/Sidebar'), {
+  ssr: false
+})
 
 const Home = () => {
   const router = useRouter()
-  const { innerWidth } = useWindowDimensions()
-  const [sidebarOpen, setSidebarOpen] = useState(true)
+  const dispatch = useDispatch()
 
-  const handleSidebar = () => {
-    setSidebarOpen(!sidebarOpen)
+  const onHamburgerClick = () => {
+    dispatch(SidebarStore.actions.toggleSidebar({}))
   }
-
-  useEffect(() => {
-    innerWidth < 800 && setSidebarOpen(false)
-  }, [innerWidth])
 
   return (
     <>
@@ -32,13 +31,13 @@ const Home = () => {
       </Head>
 
       <Container>
-        <Navbar onHamburgerClick={handleSidebar} />
+        <Navbar onHamburgerClick={onHamburgerClick} />
 
-        <CategoriesBar sidebarOpen={sidebarOpen} />
+        <CategoriesBar />
 
-        <Sidebar open={sidebarOpen} />
+        <Sidebar />
 
-        <Content sidebarOpen={sidebarOpen} />
+        <Content />
 
         <Button type='button' onClick={() => router.push('/forms')}>
           Forms

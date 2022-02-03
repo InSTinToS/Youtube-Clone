@@ -140,5 +140,5 @@ export const Content = styled.div<OpenProp>`
 export const Container = styled.aside`
   position: fixed;
   top: 56px;
-  left: 0;
+  left: 0px;
 `

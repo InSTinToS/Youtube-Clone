@@ -6,9 +6,7 @@
       "inline-react-svg",
       {
         "root": "./",
-        "alias": {
-          "svgs": "svgs"
-        }
+        "alias": { "svgs": "svgs" }
       }
     ]
   ]

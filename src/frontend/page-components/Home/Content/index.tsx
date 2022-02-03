@@ -10,14 +10,11 @@ import { RootStore } from 'frontend/types/redux'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-interface Props {
-  sidebarOpen: boolean
-}
-
-const Content = ({ sidebarOpen }: Props) => {
-  const { videos } = useSelector<RootStore, VideoStore>(
-    ({ videosStore }) => videosStore
-  )
+const Content = () => {
+  const {
+    videosStore: { videos },
+    sidebarStore: { open }
+  } = useSelector<RootStore, RootStore>(store => store)
 
   const dispatch = useDispatch()
 
@@ -26,24 +23,8 @@ const Content = ({ sidebarOpen }: Props) => {
   }, [dispatch])
 
   return (
-    <Container sidebarOpen={sidebarOpen}>
+    <Container sidebarOpen={open}>
       <ul>
-        {videos?.map((video, index) => (
-          <Video key={index} video={video} />
-        ))}
-
-        {videos?.map((video, index) => (
-          <Video key={index} video={video} />
-        ))}
-
-        {videos?.map((video, index) => (
-          <Video key={index} video={video} />
-        ))}
-
-        {videos?.map((video, index) => (
-          <Video key={index} video={video} />
-        ))}
-
         {videos?.map((video, index) => (
           <Video key={index} video={video} />
         ))}

@@ -31,7 +31,7 @@ interface Props {
 }
 
 const Navbar = ({ onHamburgerClick }: Props) => {
-  const userStore = useSelector<RootStore, UserStore>(
+  const { user } = useSelector<RootStore, UserStore>(
     ({ userStore }) => userStore
   )
 
@@ -44,7 +44,7 @@ const Navbar = ({ onHamburgerClick }: Props) => {
   return (
     <Container>
       <SidebarHeader>
-        <Hamburger onClick={onHamburgerClick} />
+        <Hamburger onClick={onHamburgerClick} data-testid='hamburger' />
 
         <Youtube />
       </SidebarHeader>
@@ -76,7 +76,7 @@ const Navbar = ({ onHamburgerClick }: Props) => {
 
         <Bell />
 
-        <img id='avatar' src={userStore.user?.avatar} />
+        <img id='avatar' src={user?.avatar} />
       </UserTools>
     </Container>
   )

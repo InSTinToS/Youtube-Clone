@@ -11,8 +11,8 @@ import React, { forwardRef, ReactNode } from 'react'
 export interface PresenceProps extends HTMLMotionProps<'div'> {
   condition: boolean
   children: ReactNode
-  presenceProps?: AnimatePresenceProps
   withPresence?: boolean
+  presenceProps?: AnimatePresenceProps
 }
 
 const defaultTransition: Transition = {
@@ -32,10 +32,10 @@ const Presence = forwardRef<any, PresenceProps>(
       children,
       condition,
       presenceProps,
-      withPresence = true,
       exit = 'exit',
       animate = 'enter',
       initial = 'initial',
+      withPresence = true,
       ...props
     },
     ref

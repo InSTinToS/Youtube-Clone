@@ -62,7 +62,6 @@ const updateCategories: NextRouteType<RES_PUT_Category> = async (req, res) => {
     const { categories }: REQ_PUT_Category = req.body
 
     const modifiedValues = []
-    console.log('tst', categories)
 
     for (let i = 0; i < categories.length; i++) {
       const { value } = await db
@@ -72,8 +71,6 @@ const updateCategories: NextRouteType<RES_PUT_Category> = async (req, res) => {
           { label: categories[i].label },
           { returnDocument: 'after' }
         )
-
-      console.log(value)
 
       modifiedValues.push(value)
     }

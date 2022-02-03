@@ -8,7 +8,6 @@ import {
 } from './styles'
 
 import getCategoriesThunk from 'frontend/store/categories/extraReducers/getCategories'
-import { CategoryStore } from 'frontend/store/categories'
 
 import { Arrow } from 'frontend/assets/icons'
 
@@ -18,21 +17,18 @@ import { motion } from 'framer-motion'
 import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-interface Props {
-  sidebarOpen: boolean
-}
-
-const CategoriesBar = ({ sidebarOpen }: Props) => {
-  const categoriesStore = useSelector<RootStore, CategoryStore>(
-    ({ categoriesStore }) => categoriesStore
-  )
-
-  const ulRef = useRef<HTMLUListElement>(null)
-  const categoriesRef = useRef<HTMLDivElement>(null)
+const CategoriesBar = () => {
+  const {
+    sidebarStore: { open },
+    categoriesStore: { categories }
+  } = useSelector<RootStore, RootStore>(store => store)
 
   const [x, setX] = useState(0)
   const [maxSize, setMaxSize] = useState(0)
   const [selected, setSelected] = useState('Tudo')
+
+  const ulRef = useRef<HTMLUListElement>(null)
+  const categoriesRef = useRef<HTMLDivElement>(null)
 
   const dispatch = useDispatch()
 
@@ -40,11 +36,17 @@ const CategoriesBar = ({ sidebarOpen }: Props) => {
     selected !== category && setSelected(category)
   }
 
-  const handleLeftArrow = () => setX(x => x + 200)
+  const handleLeftArrow = () => {
+    setX(x => x + 200)
+  }
 
-  const handleRightArrow = () => setX(x => x - 200)
+  const handleRightArrow = () => {
+    setX(x => x - 200)
+  }
 
-  const handleDragEnd = (_, { offset }) => setX(x => x + offset.x)
+  const handleDragEnd = (_, { offset }) => {
+    setX(x => x + offset.x)
+  }
 
   useEffect(() => {
     const ul = ulRef.current?.clientWidth
@@ -64,7 +66,7 @@ const CategoriesBar = ({ sidebarOpen }: Props) => {
   }, [dispatch])
 
   return (
-    <Container sidebarOpen={sidebarOpen}>
+    <Container sidebarOpen={open}>
       <LeftArrow visible={x !== 0} onClick={handleLeftArrow}>
         <Arrow />
         <Shadow />
@@ -79,9 +81,9 @@ const CategoriesBar = ({ sidebarOpen }: Props) => {
           dragConstraints={categoriesRef}
           animate={{ x, transition: { type: 'tween', duration: 0.2 } }}
         >
-          {categoriesStore?.categories?.map(({ _id, label }) => (
+          {categories?.map(({ _id, label }) => (
             <Category
-              key={Number(_id)}
+              key={_id as unknown as number}
               selected={selected === label}
               onClick={() => handleCategorySelect(label)}
             >

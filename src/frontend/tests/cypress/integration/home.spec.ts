@@ -1,7 +1,24 @@
-describe('My First Test', () => {
-  it('Does not do much!', () => {
-    cy.visit('/') // baseUrl inside cypress.json
-    cy.get('[data-testid=hello]').contains('Hello miguel') // custom typed command
+describe('Sidebar', () => {
+  context('< 800', () => {
+    beforeEach(() => {
+      cy.viewport(799, 720)
+    })
+
+    it('Toggle sidebar', () => {
+      cy.visit('/')
+      cy.toggleSidebar(0, 240)
+    })
+  })
+
+  context('>= 800', () => {
+    beforeEach(() => {
+      cy.viewport(1280, 720)
+    })
+
+    it('Toggle sidebar', () => {
+      cy.visit('/')
+      cy.toggleSidebar(240, 72)
+    })
   })
 })
 

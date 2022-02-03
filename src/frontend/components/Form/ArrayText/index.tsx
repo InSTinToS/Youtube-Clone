@@ -1,14 +1,12 @@
 import { Container } from './styles'
 import Text from '../Text'
 
-import Channel from 'types/routes/channel'
-
 import add from 'frontend/assets/icons/add.png'
 import minus from 'frontend/assets/icons/minus.png'
 
 import { FieldArray, FieldArrayRenderProps } from 'formik'
 import { ObjectId } from 'mongodb'
-import React, { useEffect, useImperativeHandle, useState } from 'react'
+import React from 'react'
 
 type OnMinusButtonClick = (
   arrayHelpers: FieldArrayRenderProps,

@@ -7,5 +7,7 @@
   "screenshotsFolder": "./src/frontend/tests/cypress/screenshots",
   "videosFolder": "./src/frontend/tests/cypress/videos",
   "downloadsFolder": "./src/frontend/tests/cypress/downloads",
-  "supportFile": "./src/frontend/tests/cypress/support"
+  "supportFile": "./src/frontend/tests/cypress/support",
+  "viewportWidth": 1280,
+  "viewportHeight": 720
 }
