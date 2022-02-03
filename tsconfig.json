@@ -6,7 +6,8 @@
     "**/*.tsx",
     "next.config.js",
     "cypress/*",
-    "*.svg"
+    "*.svg",
+    "src/backend/*"
   ],
   "compilerOptions": {
     "noEmit": true,
@@ -16,12 +17,12 @@
     "baseUrl": "src",
     "jsx": "preserve",
     "module": "esnext",
-    "types": ["cypress", "jest"],
     "skipLibCheck": true,
     "esModuleInterop": true,
     "isolatedModules": true,
     "resolveJsonModule": true,
     "moduleResolution": "node",
+    "types": ["cypress", "jest"],
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
     "lib": ["dom", "dom.iterable", "esnext"],

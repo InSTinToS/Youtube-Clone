@@ -23,6 +23,7 @@ import {
 
 import { RootStore } from 'frontend/types/redux'
 
+import { gql, useQuery } from '@apollo/client'
 import { Variants } from 'framer-motion'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -60,7 +61,17 @@ const sidebarData = {
   ]
 }
 
+const query = gql`
+  query User {
+    user {
+      avatar
+    }
+  }
+`
+
 const Sidebar = () => {
+  const { data } = useQuery(query)
+  console.log(data)
   const {
     sidebarStore: { open },
     channelsStore: { channels }
@@ -77,7 +88,7 @@ const Sidebar = () => {
 
   useEffect(() => {
     dispatch(SidebarStore.actions.toggleSidebar({ open: innerWidth >= 800 }))
-  }, [innerWidth])
+  }, [dispatch, innerWidth])
 
   return (
     <Container data-testid='sidebar'>

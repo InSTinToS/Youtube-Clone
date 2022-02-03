@@ -1,0 +1,7 @@
+type User {
+  avatar: String
+}
+
+type Query {
+  user: User
+}
