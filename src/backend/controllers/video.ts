@@ -1,4 +1,5 @@
-import { NextRouteType } from 'types/next'
+import { NextApiHandler } from 'next'
+
 import Video, {
   REQ_DELETE_Video,
   REQ_POST_Video,
@@ -10,9 +11,10 @@ import Video, {
 } from 'types/routes/video'
 
 import connectToMongoDB from 'backend/db'
+
 import { ObjectId } from 'mongodb'
 
-const getVideos: NextRouteType<RES_GET_Video> = async (_req, res) => {
+const getVideos: NextApiHandler<RES_GET_Video> = async (_req, res) => {
   try {
     let { db } = await connectToMongoDB()
 
@@ -36,7 +38,7 @@ const getVideos: NextRouteType<RES_GET_Video> = async (_req, res) => {
   }
 }
 
-const addVideos: NextRouteType<RES_POST_Video> = async (req, res) => {
+const addVideos: NextApiHandler<RES_POST_Video> = async (req, res) => {
   try {
     const { db } = await connectToMongoDB()
     const { videos }: REQ_POST_Video = req.body
@@ -65,7 +67,7 @@ const addVideos: NextRouteType<RES_POST_Video> = async (req, res) => {
   }
 }
 
-const updateVideos: NextRouteType<RES_PUT_Video> = async (req, res) => {
+const updateVideos: NextApiHandler<RES_PUT_Video> = async (req, res) => {
   try {
     const { db } = await connectToMongoDB()
     const { videos }: REQ_PUT_Video = req.body
@@ -93,7 +95,7 @@ const updateVideos: NextRouteType<RES_PUT_Video> = async (req, res) => {
   }
 }
 
-const removeVideos: NextRouteType<RES_DELETE_Video> = async (req, res) => {
+const removeVideos: NextApiHandler<RES_DELETE_Video> = async (req, res) => {
   try {
     const { db } = await connectToMongoDB()
     const { videosIds }: REQ_DELETE_Video = req.body

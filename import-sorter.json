@@ -89,6 +89,11 @@
           "regex": "^frontend/types",
           "orderLevel": 18,
           "disableSort": true
+        },
+        {
+          "regex": "^backend/",
+          "orderLevel": 18,
+          "disableSort": true
         }
       ]
     }

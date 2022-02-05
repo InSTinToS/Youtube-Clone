@@ -1,5 +1,3 @@
-import { DefaultResType } from 'types/next'
-
 import { ObjectId } from 'mongodb'
 
 interface User {
@@ -7,22 +5,21 @@ interface User {
   avatar: string
 }
 
-export interface REQ_GET_User {}
-export interface REQ_POST_User {
-  user: Omit<User, '_id'>
+interface UpdateUser {
+  updateUser: User
 }
-export interface REQ_PUT_User {
+
+interface UpdateUserVariables {
   user: User
 }
 
-export interface RES_GET_User extends DefaultResType {
+interface GetUser {
   user?: User
-}
-export interface RES_POST_User extends DefaultResType {
-  user?: User
-}
-export interface RES_PUT_User extends DefaultResType {
-  user?: User
+  users?: User[]
 }
 
-export default User
+interface GetUserVariables {
+  _id?: ObjectId
+}
+
+export type { User, UpdateUser, UpdateUserVariables, GetUser, GetUserVariables }

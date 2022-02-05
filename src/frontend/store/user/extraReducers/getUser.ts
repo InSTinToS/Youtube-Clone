@@ -1,16 +1,26 @@
 import { UserStore } from '../'
 
-import User, { RES_GET_User } from 'types/routes/user'
+import { User } from 'types/routes/user'
 
-import { get } from 'frontend/services'
+import client from 'frontend/services/apollo-client'
 
 import { ExtraReducers, RootStore } from 'frontend/types/redux'
 
+import { gql } from '@apollo/client'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 
 interface GetUserParams {
   callOnlyIfNotExists?: boolean
 }
+
+const query = gql`
+  query Query {
+    users {
+      _id
+      avatar
+    }
+  }
+`
 
 const getUserThunk = createAsyncThunk<User, GetUserParams>(
   'user/getUser',
@@ -18,8 +28,10 @@ const getUserThunk = createAsyncThunk<User, GetUserParams>(
     const { userStore } = getState() as RootStore
 
     if (!callOnlyIfNotExists || !userStore?.user?._id) {
-      const { data } = await get<RES_GET_User>('/users')
-      if (data?.user) return data.user
+      const { data } = await client.query<GQL.IQuery>({ query })
+
+      if (data.users) return data.users[data.users.length - 1]
+      else if (data.user) return data.user
     }
 
     return userStore.user

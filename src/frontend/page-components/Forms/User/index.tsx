@@ -1,12 +1,3 @@
-import User, {
-  REQ_POST_User,
-  REQ_PUT_User,
-  RES_POST_User,
-  RES_PUT_User
-} from 'types/routes/user'
-
-import { post, put } from 'frontend/services'
-
 import getUserThunk from 'frontend/store/user/extraReducers/getUser'
 import { UserStore } from 'frontend/store/user'
 
@@ -16,42 +7,67 @@ import Presence from 'frontend/components/Presence'
 
 import { RootStore } from 'frontend/types/redux'
 
+import { gql, useMutation } from '@apollo/client'
 import { Form, Formik } from 'formik'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+
+const updateUserMutation = gql`
+  mutation UpdateUser($user: UserToUpdate!) {
+    updateUser(user: $user) {
+      _id
+      avatar
+    }
+  }
+`
+
+const addUserMutation = gql`
+  mutation UpdateUser($user: UserToAdd!) {
+    addUser(user: $user) {
+      _id
+      avatar
+    }
+  }
+`
 
 const UserCard = () => {
   const userStore = useSelector<RootStore, UserStore>(
     ({ userStore }) => userStore
   )
 
-  const [user, setUser] = useState<Partial<User>>({ avatar: '' })
+  const [user, setUser] = useState<Partial<GQL.IUser>>({ avatar: '' })
   const [animateVariant, setAnimateVariant] =
     useState<ButtonVariants>('default')
 
+  const [updateUser] =
+    useMutation<Pick<GQL.IMutation, 'updateUser'>>(updateUserMutation)
+  const [addUser] = useMutation<Pick<GQL.IMutation, 'addUser'>>(addUserMutation)
+
   const dispatch = useDispatch()
 
-  const onUserSubmit = async ({ avatar }: any) => {
-    let response: RES_PUT_User | RES_POST_User
-
+  const onUserSubmit = async ({ avatar }: Partial<GQL.IUser>) => {
     setAnimateVariant('default')
 
+    let updatedUser: GQL.IUser
+
     if (user?._id) {
-      const { data } = await put<RES_PUT_User, REQ_PUT_User>('/users', {
-        user: { avatar, _id: user._id }
-      })
+      const variables: GQL.IUpdateUserOnMutationArguments = {
+        user: { _id: user._id, avatar }
+      }
 
-      response = data
+      const response = await updateUser({ variables })
+
+      updatedUser = response.data.updateUser
     } else {
-      const { data } = await post<RES_POST_User, REQ_POST_User>('/users', {
-        user: { avatar }
-      })
+      const variables: GQL.IAddUserOnMutationArguments = { user: { avatar } }
 
-      response = data
+      const response = await addUser({ variables })
+
+      updatedUser = response.data.addUser
     }
 
-    if (response.success) {
-      setUser(response.user)
+    if (updatedUser) {
+      setUser(updatedUser)
       setAnimateVariant('success')
     } else setAnimateVariant('failed')
   }
@@ -61,8 +77,8 @@ const UserCard = () => {
   }, [userStore])
 
   useEffect(() => {
-    dispatch(getUserThunk({ callOnlyIfNotExists: true }))
-  }, [])
+    dispatch(getUserThunk({}))
+  }, [dispatch])
 
   return (
     <section>

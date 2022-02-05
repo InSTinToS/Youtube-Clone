@@ -1,7 +1,28 @@
+input UserToAdd {
+  avatar: String!
+}
+
+input UserToDelete {
+  _id: ID!
+}
+
+input UserToUpdate {
+  _id: ID!
+  avatar: String!
+}
+
 type User {
+  _id: ID!
   avatar: String
 }
 
 type Query {
-  user: User
+  users: [User]
+  user(_id: ID!): User
+}
+
+type Mutation {
+  addUser(user: UserToAdd!): User
+  updateUser(user: UserToUpdate!): User
+  deleteUser(userId: ID!): User
 }

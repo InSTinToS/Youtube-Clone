@@ -1,4 +1,5 @@
-import { NextRouteType } from 'types/next'
+import { NextApiHandler } from 'next'
+
 import Channel, {
   REQ_DELETE_Channel,
   REQ_POST_Channel,
@@ -10,9 +11,10 @@ import Channel, {
 } from 'types/routes/channel'
 
 import connectToMongoDB from 'backend/db'
+
 import { ObjectId } from 'mongodb'
 
-const getChannels: NextRouteType<RES_GET_Channel> = async (_req, res) => {
+const getChannels: NextApiHandler<RES_GET_Channel> = async (_req, res) => {
   try {
     let { db } = await connectToMongoDB()
 
@@ -24,7 +26,7 @@ const getChannels: NextRouteType<RES_GET_Channel> = async (_req, res) => {
   }
 }
 
-const addChannels: NextRouteType<RES_POST_Channel> = async (req, res) => {
+const addChannels: NextApiHandler<RES_POST_Channel> = async (req, res) => {
   try {
     const { db } = await connectToMongoDB()
     const { channels }: REQ_POST_Channel = req.body
@@ -53,7 +55,7 @@ const addChannels: NextRouteType<RES_POST_Channel> = async (req, res) => {
   }
 }
 
-const updateChannels: NextRouteType<RES_PUT_Channel> = async (req, res) => {
+const updateChannels: NextApiHandler<RES_PUT_Channel> = async (req, res) => {
   try {
     const { db } = await connectToMongoDB()
     const { channels }: REQ_PUT_Channel = req.body
@@ -78,7 +80,7 @@ const updateChannels: NextRouteType<RES_PUT_Channel> = async (req, res) => {
   }
 }
 
-const removeChannels: NextRouteType<RES_DELETE_Channel> = async (req, res) => {
+const removeChannels: NextApiHandler<RES_DELETE_Channel> = async (req, res) => {
   try {
     const { db } = await connectToMongoDB()
     const { channelsIds }: REQ_DELETE_Channel = req.body

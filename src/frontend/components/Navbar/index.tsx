@@ -38,8 +38,8 @@ const Navbar = ({ onHamburgerClick }: Props) => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(getUserThunk({ callOnlyIfNotExists: true }))
-  }, [])
+    dispatch(getUserThunk({}))
+  }, [dispatch])
 
   return (
     <Container>

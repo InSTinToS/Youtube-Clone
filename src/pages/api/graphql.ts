@@ -1,29 +1,24 @@
+import { NextApiHandler } from 'next'
+
+import graphql from 'backend/graphql'
+
 import { ApolloServer } from 'apollo-server-micro'
-import resolvers from 'backend/graphql/resolvers'
-import typeDefs from 'backend/graphql/typeDefs'
 import Cors from 'micro-cors'
 
 const cors = Cors()
 
-const apolloServer = new ApolloServer({ typeDefs, resolvers })
+const apolloServer = new ApolloServer(graphql)
 
 const startServer = apolloServer.start()
 
-export const config = {
-  api: { bodyParser: false }
-}
+export const config = { api: { bodyParser: false } }
 
-const handler = async (req, res) => {
-  if (req.method === 'OPTIONS') {
-    res.end()
-    return false
+const handler: NextApiHandler = async (req, res) => {
+  if (req.method === 'OPTIONS') res.end()
+  else {
+    await startServer
+    await apolloServer.createHandler({ path: '/api/graphql' })(req, res)
   }
-
-  await startServer
-
-  await apolloServer.createHandler({
-    path: '/api/graphql'
-  })(req, res)
 }
 
 export default cors(handler)

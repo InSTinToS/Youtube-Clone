@@ -1,4 +1,4 @@
-import { DefaultResType } from 'types/next'
+import DefaultResType from './'
 
 import { ObjectId } from 'mongodb'
 

@@ -61,17 +61,7 @@ const sidebarData = {
   ]
 }
 
-const query = gql`
-  query User {
-    user {
-      avatar
-    }
-  }
-`
-
 const Sidebar = () => {
-  const { data } = useQuery(query)
-  console.log(data)
   const {
     sidebarStore: { open },
     channelsStore: { channels }

@@ -2,12 +2,6 @@
   "presets": ["next/babel"],
   "plugins": [
     ["styled-components", { "ssr": true }],
-    [
-      "inline-react-svg",
-      {
-        "root": "./",
-        "alias": { "svgs": "svgs" }
-      }
-    ]
+    ["inline-react-svg", { "root": "./", "alias": { "svgs": "svgs" } }]
   ]
 }

@@ -1,4 +1,5 @@
-import { NextRouteType } from 'types/next'
+import { NextApiHandler } from 'next'
+
 import Category, {
   REQ_DELETE_Category,
   REQ_POST_Category,
@@ -10,9 +11,10 @@ import Category, {
 } from 'types/routes/category'
 
 import connectToMongoDB from 'backend/db'
+
 import { ObjectId } from 'mongodb'
 
-const getCategories: NextRouteType<RES_GET_Category> = async (_req, res) => {
+const getCategories: NextApiHandler<RES_GET_Category> = async (_req, res) => {
   try {
     let { db } = await connectToMongoDB()
 
@@ -27,7 +29,7 @@ const getCategories: NextRouteType<RES_GET_Category> = async (_req, res) => {
   }
 }
 
-const addCategories: NextRouteType<RES_POST_Category> = async (req, res) => {
+const addCategories: NextApiHandler<RES_POST_Category> = async (req, res) => {
   try {
     const { db } = await connectToMongoDB()
     const { categories }: REQ_POST_Category = req.body
@@ -56,7 +58,7 @@ const addCategories: NextRouteType<RES_POST_Category> = async (req, res) => {
   }
 }
 
-const updateCategories: NextRouteType<RES_PUT_Category> = async (req, res) => {
+const updateCategories: NextApiHandler<RES_PUT_Category> = async (req, res) => {
   try {
     const { db } = await connectToMongoDB()
     const { categories }: REQ_PUT_Category = req.body
@@ -81,7 +83,7 @@ const updateCategories: NextRouteType<RES_PUT_Category> = async (req, res) => {
   }
 }
 
-const removeCategories: NextRouteType<RES_DELETE_Category> = async (
+const removeCategories: NextApiHandler<RES_DELETE_Category> = async (
   req,
   res
 ) => {

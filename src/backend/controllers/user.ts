@@ -1,19 +1,27 @@
-import { NextRouteType } from 'types/next'
-import User, {
+import { NextApiHandler } from 'next'
+
+import {
+  REQ_GET_Users,
   REQ_POST_User,
   REQ_PUT_User,
-  RES_GET_User,
+  RES_GET_Users,
   RES_POST_User,
   RES_PUT_User
 } from 'types/routes/user'
 
-import connectToMongoDB from 'backend/db'
-import { ObjectId } from 'mongodb'
+import {
+  addUser as addUserService,
+  deleteUser as deleteUserService,
+  getUser as getUserService,
+  getUsers as getUsersService,
+  updateUser as updateUserService
+} from 'backend/services/user'
 
-const getUser: NextRouteType<RES_GET_User> = async (_req, res) => {
+const getUsers: NextApiHandler<RES_GET_Users> = async (req, res) => {
   try {
-    let { db } = await connectToMongoDB()
-    const user = await db.collection<User>('users').findOne()
+    const { _id } = req.body as REQ_GET_Users
+
+    const user = await (_id ? getUserService(_id) : getUsersService())
 
     return res.json({ user, success: true })
   } catch (error) {
@@ -21,17 +29,23 @@ const getUser: NextRouteType<RES_GET_User> = async (_req, res) => {
   }
 }
 
-const addUser: NextRouteType<RES_POST_User> = async (req, res) => {
+const addUser: NextApiHandler<RES_POST_User> = async (req, res) => {
   try {
     const { user }: REQ_POST_User = req.body
-    let { db } = await connectToMongoDB()
-    const newId = new ObjectId()
 
-    await db.collection<User>('users').insertOne({ _id: newId, ...user })
+    const addedUser = await addUserService(user)
 
-    const updatedUser = await db
-      .collection<User>('users')
-      .findOne({ _id: newId })
+    return res.json({ success: true, user: addedUser })
+  } catch (error) {
+    return res.json({ success: false, message: new Error(error).message })
+  }
+}
+
+const updateUser: NextApiHandler<RES_PUT_User> = async (req, res) => {
+  try {
+    const { user }: REQ_PUT_User = req.body
+
+    const updatedUser = await updateUserService(user)
 
     return res.json({ success: true, user: updatedUser })
   } catch (error) {
@@ -39,23 +53,16 @@ const addUser: NextRouteType<RES_POST_User> = async (req, res) => {
   }
 }
 
-const updateUser: NextRouteType<RES_PUT_User> = async (req, res) => {
+const deleteUser: NextApiHandler<RES_PUT_User> = async (req, res) => {
   try {
     const { user }: REQ_PUT_User = req.body
-    let { db } = await connectToMongoDB()
 
-    const updatedUser = await db
-      .collection<User>('users')
-      .findOneAndReplace(
-        { _id: new ObjectId(user._id) },
-        { avatar: user.avatar },
-        { returnDocument: 'after' }
-      )
+    const updatedUser = await deleteUserService(user._id)
 
-    return res.json({ success: true, user: updatedUser.value })
+    return res.json({ success: true, user: updatedUser })
   } catch (error) {
     return res.json({ success: false, message: new Error(error).message })
   }
 }
 
-export { addUser, getUser, updateUser }
+export { addUser, getUsers, updateUser, deleteUser }
