@@ -4,7 +4,7 @@ import {
   getUser,
   getUsers,
   updateUser
-} from 'backend/services/user'
+} from 'backend/modules/users/users'
 
 import { Resolvers } from '@apollo/client'
 

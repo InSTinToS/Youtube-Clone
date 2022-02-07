@@ -1,11 +1,9 @@
 import extraReducers from './extraReducers'
 
-import UserType from 'types/routes/user'
-
 import { createSlice } from '@reduxjs/toolkit'
 
 export interface UserStore {
-  user?: UserType
+  user?: GQL.IUser
   loading: boolean
 }
 

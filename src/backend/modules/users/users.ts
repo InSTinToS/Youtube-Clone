@@ -1,20 +1,21 @@
-import User from 'types/routes/user'
+import {
+  AddUser,
+  DeleteUser,
+  GetUser,
+  GetUsers,
+  UpdateUser,
+  UserCollection
+} from './types'
 
 import connectToMongoDB from 'backend/db'
 
 import { ObjectId } from 'mongodb'
 
-type GetUser = (userId: ObjectId) => Promise<User>
-type GetUsers = () => Promise<User[]>
-type AddUser = (user: Omit<User, '_id'>) => Promise<User>
-type UpdateUser = (user: User) => Promise<User>
-type DeleteUser = (userId: ObjectId) => Promise<User>
-
 const getUser: GetUser = async userId => {
   let { db } = await connectToMongoDB()
 
   const user = await db
-    .collection<User>('users')
+    .collection<UserCollection>('users')
     .findOne({ _id: new ObjectId(userId) })
 
   return user
@@ -22,17 +23,21 @@ const getUser: GetUser = async userId => {
 
 const getUsers: GetUsers = async () => {
   let { db } = await connectToMongoDB()
-  const users = await db.collection<User>('users').find({}).toArray()
+  const users = await db.collection<UserCollection>('users').find({}).toArray()
   return users
 }
 
 const addUser: AddUser = async user => {
-  let { db } = await connectToMongoDB()
   const newId = new ObjectId()
+  let { db } = await connectToMongoDB()
 
-  await db.collection<User>('users').insertOne({ _id: newId, ...user })
+  await db
+    .collection<UserCollection>('users')
+    .insertOne({ ...user, _id: newId })
 
-  const addedUser = await db.collection<User>('users').findOne({ _id: newId })
+  const addedUser = await db
+    .collection<UserCollection>('users')
+    .findOne({ _id: newId })
 
   return addedUser
 }
@@ -45,7 +50,7 @@ const updateUser: UpdateUser = async user => {
   delete user._id
 
   const { value: updatedUser } = await db
-    .collection<User>('users')
+    .collection<UserCollection>('users')
     .findOneAndReplace(
       { _id: new ObjectId(userId) },
       { ...user },
@@ -59,7 +64,7 @@ const deleteUser: DeleteUser = async userId => {
   let { db } = await connectToMongoDB()
 
   const { value: deletedUser } = await db
-    .collection<User>('users')
+    .collection<UserCollection>('users')
     .findOneAndDelete({ _id: new ObjectId(userId) })
 
   return deletedUser

@@ -1,15 +1,4 @@
-import Category, {
-  REQ_DELETE_Category,
-  REQ_POST_Category,
-  REQ_PUT_Category,
-  RES_DELETE_Category,
-  RES_POST_Category,
-  RES_PUT_Category
-} from 'types/routes/category'
-
 import getFormData from 'frontend/utils/getFormValues'
-
-import { post, put, remove } from 'frontend/services'
 
 import getCategoriesThunk from 'frontend/store/categories/extraReducers/getCategories'
 import { CategoryStore } from 'frontend/store/categories'
@@ -20,56 +9,107 @@ import Presence from 'frontend/components/Presence'
 
 import { RootStore } from 'frontend/types/redux'
 
+import { gql, useMutation } from '@apollo/client'
 import { Form, Formik } from 'formik'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 const arrayTextFields = [{ name: 'label', label: 'Category' }]
 
+const deleteCategoriesQuery = gql`
+  mutation Mutation($categoriesToDelete: [CategoryToUpdate!]!) {
+    deleteCategories(categoriesToDelete: $categoriesToDelete) {
+      deletedCount
+    }
+  }
+`
+
+const updateCategoriesQuery = gql`
+  mutation Mutation($updatedCategories: [CategoryToUpdate!]!) {
+    updateCategories(updatedCategories: $updatedCategories) {
+      _id
+      label
+    }
+  }
+`
+
+const addCategoriesQuery = gql`
+  mutation Mutation($newCategories: [CategoryToAdd!]!) {
+    addCategories(newCategories: $newCategories) {
+      _id
+      label
+    }
+  }
+`
+
 const CategoryCard = () => {
   const categoriesStore = useSelector<RootStore, CategoryStore>(
     ({ categoriesStore }) => categoriesStore
   )
-  const [categories, setCategories] = useState<Category[]>()
+
+  const [categories, setCategories] = useState<GQL.ICategory[]>()
   const [animateButton, setAnimateButton] = useState<ButtonVariants>('default')
+
+  const [updateCategories] = useMutation<
+    Pick<GQL.IMutation, 'updateCategories'>
+  >(updateCategoriesQuery)
+
+  const [addCategories] =
+    useMutation<Pick<GQL.IMutation, 'addCategories'>>(addCategoriesQuery)
+
+  const [deleteCategories] = useMutation<
+    Pick<GQL.IMutation, 'deleteCategories'>
+  >(deleteCategoriesQuery)
 
   const dispatch = useDispatch()
 
-  const onCategorySubmit = async (values: { categories: Category[] }) => {
+  const onCategorySubmit = async (values: { categories: GQL.ICategory[] }) => {
     setCategories(undefined)
     setAnimateButton('default')
 
     let resSuccess: boolean
-    const { dataToCreate, dataToUpdate, idsToRemove } = getFormData<Category>(
-      categoriesStore?.categories,
-      values?.categories
-    )
-
-    if (idsToRemove?.length > 0) {
-      const { data } = await remove<RES_DELETE_Category, REQ_DELETE_Category>(
-        '/categories',
-        { data: { categoriesIds: idsToRemove } }
+    const { dataToCreate, dataToUpdate, dataToRemove } =
+      getFormData<GQL.ICategory>(
+        categoriesStore?.categories,
+        values?.categories
       )
 
-      resSuccess = data.success
+    if (dataToRemove?.length > 0) {
+      const variables: GQL.IDeleteCategoriesOnMutationArguments = {
+        categoriesToDelete: dataToRemove
+      }
+
+      const {
+        data: {
+          deleteCategories: { deletedCount }
+        }
+      } = await deleteCategories({ variables })
+
+      resSuccess = !!deletedCount
     }
 
     if (dataToCreate?.length > 0) {
-      const { data } = await post<RES_POST_Category, REQ_POST_Category>(
-        '/categories',
-        { categories: dataToCreate }
-      )
+      const variables: GQL.IAddCategoriesOnMutationArguments = {
+        newCategories: dataToCreate
+      }
 
-      resSuccess = resSuccess === false ? false : data.success
+      const {
+        data: { addCategories: addedCategories }
+      } = await addCategories({ variables })
+
+      resSuccess = !!addedCategories
     }
 
     if (dataToUpdate?.length > 0) {
-      const { data } = await put<RES_PUT_Category, REQ_PUT_Category>(
-        '/categories',
-        { categories: dataToUpdate }
-      )
+      const variables: GQL.IUpdateCategoriesOnMutationArguments = {
+        updatedCategories: dataToUpdate
+      }
 
-      resSuccess = resSuccess === false ? false : data.success
+      const {
+        data: { updateCategories: updatedCategories }
+      } = await updateCategories({ variables })
+
+      resSuccess = !!updatedCategories
     }
 
     setAnimateButton(resSuccess ? 'success' : 'failed')

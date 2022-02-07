@@ -1,24 +1,36 @@
 import { CategoryStore } from '../'
 
-import Category, { RES_GET_Category } from 'types/routes/category'
-
-import { get } from 'frontend/services'
+import client from 'frontend/services/apollo-client'
 
 import { ExtraReducers, RootStore } from 'frontend/types/redux'
 
+import { gql } from '@apollo/client'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 
 interface GetCategoryParams {
   callOnlyIfNotExists?: boolean
 }
 
-const getCategoriesThunk = createAsyncThunk<Category[], GetCategoryParams>(
+const getCategoriesQuery = gql`
+  query Query {
+    categories {
+      _id
+      label
+    }
+  }
+`
+
+const getCategoriesThunk = createAsyncThunk<GQL.ICategory[], GetCategoryParams>(
   'categories/getCategories',
   async ({ callOnlyIfNotExists = false }, { getState }) => {
     const { categoriesStore } = getState() as RootStore
 
     if (!callOnlyIfNotExists || categoriesStore?.categories.length === 0) {
-      const { data } = await get<RES_GET_Category>('/categories')
+      await client.clearStore()
+
+      const { data } = await client.query<GQL.IQuery>({
+        query: getCategoriesQuery
+      })
 
       if (data?.categories) return data.categories
     }

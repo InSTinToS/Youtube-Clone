@@ -1,0 +1,27 @@
+type DeletedCount {
+  deletedCount: Int
+}
+
+input CategoryToUpdate {
+  _id: ID!
+  label: String!
+}
+
+input CategoryToAdd {
+  label: String!
+}
+
+type Category {
+  _id: ID!
+  label: String!
+}
+
+type Query {
+  categories: [Category!]!
+}
+
+type Mutation {
+  updateCategories(updatedCategories: [CategoryToUpdate!]!): [Category!]
+  addCategories(newCategories: [CategoryToAdd!]!): [Category!]
+  deleteCategories(categoriesToDelete: [CategoryToUpdate!]!): DeletedCount
+}

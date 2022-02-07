@@ -14,7 +14,7 @@
     "generate-gql-schema": "apollo-codegen introspect-schema http://localhost:3000/api/graphql --output ./src/types/graphql/graphql-schema.json",
     "gql2ts": "yarn generate-gql-schema && gql2ts ./src/types/graphql/graphql-schema.json -o ./src/types/graphql/graphql.d.ts",
     "cy-open": "cypress open",
-    "cye2e": "start-server-and-test start http://localhost:3000 cypress"
+    "cy-e2e": "start-server-and-test start http://localhost:3000 cypress"
   },
   "dependencies": {
     "@apollo/client": "^3.5.8",

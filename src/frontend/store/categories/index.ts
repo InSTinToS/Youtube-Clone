@@ -1,12 +1,10 @@
 import extraReducers from './extraReducers'
 
-import CategoryType from 'types/routes/category'
-
 import { createSlice } from '@reduxjs/toolkit'
 
 export interface CategoryStore {
   loading: boolean
-  categories?: CategoryType[]
+  categories?: GQL.ICategory[]
 }
 
 export const initialState: CategoryStore = {

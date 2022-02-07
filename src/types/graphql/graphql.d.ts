@@ -22,6 +22,7 @@ declare namespace GQL {
 
   interface IQuery {
     __typename: 'Query';
+    categories: Array<ICategory>;
     users: Array<IUser | null> | null;
     user: IUser | null;
   }
@@ -30,17 +31,38 @@ declare namespace GQL {
     _id: string;
   }
 
+  interface ICategory {
+    __typename: 'Category';
+    _id: string;
+    label: string;
+  }
+
   interface IUser {
     __typename: 'User';
     _id: string;
-    avatar: string | null;
+    avatar: string;
   }
 
   interface IMutation {
     __typename: 'Mutation';
+    updateCategories: Array<ICategory> | null;
+    addCategories: Array<ICategory> | null;
+    deleteCategories: IDeletedCount | null;
     addUser: IUser | null;
     updateUser: IUser | null;
     deleteUser: IUser | null;
+  }
+
+  interface IUpdateCategoriesOnMutationArguments {
+    updatedCategories: Array<ICategoryToUpdate>;
+  }
+
+  interface IAddCategoriesOnMutationArguments {
+    newCategories: Array<ICategoryToAdd>;
+  }
+
+  interface IDeleteCategoriesOnMutationArguments {
+    categoriesToDelete: Array<ICategoryToUpdate>;
   }
 
   interface IAddUserOnMutationArguments {
@@ -53,6 +75,20 @@ declare namespace GQL {
 
   interface IDeleteUserOnMutationArguments {
     userId: string;
+  }
+
+  interface ICategoryToUpdate {
+    _id: string;
+    label: string;
+  }
+
+  interface ICategoryToAdd {
+    label: string;
+  }
+
+  interface IDeletedCount {
+    __typename: 'DeletedCount';
+    deletedCount: number | null;
   }
 
   interface IUserToAdd {
