@@ -1,4 +1,4 @@
-import extraReducers from './extraReducers'
+import extraReducers from './extra-reducers'
 
 import ChannelType from 'types/routes/channel'
 

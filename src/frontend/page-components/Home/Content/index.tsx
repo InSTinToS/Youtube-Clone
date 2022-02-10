@@ -1,7 +1,7 @@
 import { Container } from './styles'
 
 import { VideoStore } from 'frontend/store/videos'
-import getVideosThunk from 'frontend/store/videos/extraReducers/getVideos'
+import getVideosThunk from 'frontend/store/videos/extra-reducers/getVideos'
 
 import Video from 'frontend/components/Video'
 

@@ -11,7 +11,7 @@ import getFormData from 'frontend/utils/getFormValues'
 
 import { post, put, remove } from 'frontend/services'
 
-import getVideosThunk from 'frontend/store/videos/extraReducers/getVideos'
+import getVideosThunk from 'frontend/store/videos/extra-reducers/getVideos'
 import { VideoStore } from 'frontend/store/videos'
 
 import Button, { ButtonVariants } from 'frontend/components/Form/Button'
@@ -47,15 +47,15 @@ const VideoCard = () => {
 
     let resSuccess: boolean
 
-    const { dataToCreate, dataToUpdate, idsToRemove } = getFormData<Video>(
+    const { dataToCreate, dataToUpdate, idsToDelete } = getFormData<Video>(
       videosStore?.videos,
       values?.videos
     )
 
-    if (idsToRemove?.length > 0) {
+    if (idsToDelete?.length > 0) {
       const { data } = await remove<RES_DELETE_Video, REQ_DELETE_Video>(
         '/videos',
-        { data: { videosIds: idsToRemove } }
+        { data: { videosIds: idsToDelete } }
       )
 
       resSuccess = data.success

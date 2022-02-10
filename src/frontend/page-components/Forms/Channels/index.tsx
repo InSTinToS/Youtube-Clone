@@ -11,7 +11,7 @@ import getFormData from 'frontend/utils/getFormValues'
 
 import { post, put, remove } from 'frontend/services'
 
-import getChannelsThunk from 'frontend/store/channels/extraReducers/getChannels'
+import getChannelsThunk from 'frontend/store/channels/extra-reducers/getChannels'
 import { ChannelStore } from 'frontend/store/channels'
 
 import Button, { ButtonVariants } from 'frontend/components/Form/Button'
@@ -45,15 +45,15 @@ const ChannelCard = () => {
 
     let resSuccess: boolean
 
-    const { dataToCreate, dataToUpdate, idsToRemove } = getFormData<Channel>(
+    const { dataToCreate, dataToUpdate, idsToDelete } = getFormData<Channel>(
       channelsStore?.channels,
       values?.channels
     )
 
-    if (idsToRemove?.length > 0) {
+    if (idsToDelete?.length > 0) {
       const { data } = await remove<RES_DELETE_Channel, REQ_DELETE_Channel>(
         '/channels',
-        { data: { channelsIds: idsToRemove } }
+        { data: { channelsIds: idsToDelete } }
       )
 
       resSuccess = data.success

@@ -1,4 +1,5 @@
-import extraReducers from './extraReducers'
+import extraReducers from './extra-reducers'
+import reducers from './reducers'
 
 import { createSlice } from '@reduxjs/toolkit'
 
@@ -13,8 +14,9 @@ export const initialState: UserStore = {
 
 const User = createSlice({
   name: 'user',
-  reducers: {},
+  reducers,
   initialState,
+
   extraReducers
 })
 

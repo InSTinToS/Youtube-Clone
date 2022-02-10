@@ -25,7 +25,7 @@ const getCategoriesThunk = createAsyncThunk<GQL.ICategory[], GetCategoryParams>(
   async ({ callOnlyIfNotExists = false }, { getState }) => {
     const { categoriesStore } = getState() as RootStore
 
-    if (!callOnlyIfNotExists || categoriesStore?.categories.length === 0) {
+    if (!callOnlyIfNotExists || !categoriesStore?.categories) {
       await client.clearStore()
 
       const { data } = await client.query<GQL.IQuery>({

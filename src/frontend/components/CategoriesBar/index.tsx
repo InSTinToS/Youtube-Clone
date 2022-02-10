@@ -7,7 +7,7 @@ import {
   Shadow
 } from './styles'
 
-import getCategoriesThunk from 'frontend/store/categories/extraReducers/getCategories'
+import getCategoriesThunk from 'frontend/store/categories/extra-reducers/getCategories'
 
 import { Arrow } from 'frontend/assets/icons'
 

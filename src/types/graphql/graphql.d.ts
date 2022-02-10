@@ -24,11 +24,6 @@ declare namespace GQL {
     __typename: 'Query';
     categories: Array<ICategory>;
     users: Array<IUser | null> | null;
-    user: IUser | null;
-  }
-
-  interface IUserOnQueryArguments {
-    _id: string;
   }
 
   interface ICategory {
@@ -40,41 +35,62 @@ declare namespace GQL {
   interface IUser {
     __typename: 'User';
     _id: string;
+    name: string;
     avatar: string;
   }
 
   interface IMutation {
     __typename: 'Mutation';
-    updateCategories: Array<ICategory> | null;
-    addCategories: Array<ICategory> | null;
-    deleteCategories: IDeletedCount | null;
-    addUser: IUser | null;
-    updateUser: IUser | null;
-    deleteUser: IUser | null;
-  }
-
-  interface IUpdateCategoriesOnMutationArguments {
-    updatedCategories: Array<ICategoryToUpdate>;
+    addCategories: IAddCategoriesReturn | null;
+    updateCategories: IUpdateCategoriesReturn | null;
+    deleteCategories: IDeleteCategoriesReturn | null;
+    addUsers: IAddUsersReturn | null;
+    updateUsers: IUpdateUsersReturn | null;
+    deleteUsers: IDeleteUsersReturn | null;
   }
 
   interface IAddCategoriesOnMutationArguments {
-    newCategories: Array<ICategoryToAdd>;
+    params?: IAddCategoriesParams | null;
+  }
+
+  interface IUpdateCategoriesOnMutationArguments {
+    params?: IUpdateCategoriesParams | null;
   }
 
   interface IDeleteCategoriesOnMutationArguments {
-    categoriesToDelete: Array<ICategoryToUpdate>;
+    params?: IDeleteCategoriesParams | null;
   }
 
-  interface IAddUserOnMutationArguments {
-    user: IUserToAdd;
+  interface IAddUsersOnMutationArguments {
+    params?: IAddUsersParams | null;
   }
 
-  interface IUpdateUserOnMutationArguments {
-    user: IUserToUpdate;
+  interface IUpdateUsersOnMutationArguments {
+    params?: IUpdateUsersParams | null;
   }
 
-  interface IDeleteUserOnMutationArguments {
-    userId: string;
+  interface IDeleteUsersOnMutationArguments {
+    params?: IDeleteUsersParams | null;
+  }
+
+  interface IAddCategoriesParams {
+    returnAll?: boolean | null;
+    categoriesToAdd?: Array<ICategoriesToAdd> | null;
+  }
+
+  interface ICategoriesToAdd {
+    label: string;
+  }
+
+  interface IAddCategoriesReturn {
+    __typename: 'AddCategoriesReturn';
+    all: Array<ICategory> | null;
+    addedData: Array<ICategory> | null;
+  }
+
+  interface IUpdateCategoriesParams {
+    returnAll?: boolean | null;
+    categoriesToUpdate?: Array<ICategoryToUpdate> | null;
   }
 
   interface ICategoryToUpdate {
@@ -82,22 +98,65 @@ declare namespace GQL {
     label: string;
   }
 
-  interface ICategoryToAdd {
-    label: string;
+  interface IUpdateCategoriesReturn {
+    __typename: 'UpdateCategoriesReturn';
+    all: Array<ICategory> | null;
+    updatedData: Array<ICategory> | null;
   }
 
-  interface IDeletedCount {
-    __typename: 'DeletedCount';
-    deletedCount: number | null;
+  interface IDeleteCategoriesParams {
+    returnAll?: boolean | null;
+    idsToDelete?: Array<string> | null;
+  }
+
+  interface IDeleteCategoriesReturn {
+    __typename: 'DeleteCategoriesReturn';
+    all: Array<ICategory> | null;
+    deletedData: Array<ICategory> | null;
+  }
+
+  interface IAddUsersParams {
+    returnAll?: boolean | null;
+    usersToAdd?: Array<IUserToAdd> | null;
   }
 
   interface IUserToAdd {
+    name: string;
     avatar: string;
+  }
+
+  interface IAddUsersReturn {
+    __typename: 'AddUsersReturn';
+    all: Array<IUser> | null;
+    addedData: Array<IUser> | null;
+  }
+
+  interface IUpdateUsersParams {
+    returnAll?: boolean | null;
+    usersToUpdate?: Array<IUserToUpdate> | null;
   }
 
   interface IUserToUpdate {
     _id: string;
+    name: string;
     avatar: string;
+  }
+
+  interface IUpdateUsersReturn {
+    __typename: 'UpdateUsersReturn';
+    all: Array<IUser> | null;
+    updatedData: Array<IUser> | null;
+  }
+
+  interface IDeleteUsersParams {
+    returnAll?: boolean | null;
+    idsToDelete?: Array<string> | null;
+  }
+
+  interface IDeleteUsersReturn {
+    __typename: 'DeleteUsersReturn';
+    all: Array<IUser> | null;
+    deletedData: Array<IUser> | null;
   }
 
   interface IUserToDelete {

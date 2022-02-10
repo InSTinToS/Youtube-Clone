@@ -1,4 +1,5 @@
-import extraReducers from './extraReducers'
+import extraReducers from './extra-reducers'
+import reducers from './reducers'
 
 import { createSlice } from '@reduxjs/toolkit'
 
@@ -13,7 +14,7 @@ export const initialState: CategoryStore = {
 
 const Category = createSlice({
   name: 'categories',
-  reducers: {},
+  reducers,
   initialState,
   extraReducers
 })

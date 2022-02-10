@@ -6,10 +6,12 @@ import {
   PayloadAction
 } from '@reduxjs/toolkit'
 
-export type Reducer<State> = CaseReducer<State, PayloadAction<Partial<State>>>
+type Reducer<State> = CaseReducer<State, PayloadAction<Partial<State>>>
 
-export type ExtraReducers<State> = (
-  _builder: ActionReducerMapBuilder<State>
-) => void
+type ExtraReducers<State> = (_builder: ActionReducerMapBuilder<State>) => void
 
-export type RootStore = ReturnType<typeof store.getState>
+type RootStore = ReturnType<typeof store.getState>
+
+type AppDispatch = typeof store.dispatch
+
+export type { Reducer, ExtraReducers, RootStore, AppDispatch }

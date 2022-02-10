@@ -1,10 +1,8 @@
 import Channel from './channel'
 import DefaultResType from './'
 
-import { ObjectId } from 'mongodb'
-
 interface Video {
-  _id: ObjectId
+  _id: string
   views: number
   title: string
   thumbnail: string
@@ -20,7 +18,7 @@ export interface REQ_PUT_Video {
   videos: Video[]
 }
 export interface REQ_DELETE_Video {
-  videosIds: ObjectId[]
+  videosIds: string[]
 }
 
 export interface RES_GET_Video extends DefaultResType {

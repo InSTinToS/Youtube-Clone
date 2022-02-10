@@ -1,4 +1,4 @@
-import extraReducers from './extraReducers'
+import extraReducers from './extra-reducers'
 
 import VideoType from 'types/routes/video'
 

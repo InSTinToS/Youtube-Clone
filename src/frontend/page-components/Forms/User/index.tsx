@@ -1,5 +1,7 @@
-import getUserThunk from 'frontend/store/user/extraReducers/getUser'
-import { UserStore } from 'frontend/store/user'
+import getUserThunk from 'frontend/store/user/extra-reducers/getUser'
+import User, { UserStore } from 'frontend/store/user'
+
+import { useAppDispatch, useAppSelector } from 'frontend/hooks/redux'
 
 import Text from 'frontend/components/Form/Text'
 import Button, { ButtonVariants } from 'frontend/components/Form/Button'
@@ -10,74 +12,77 @@ import { RootStore } from 'frontend/types/redux'
 import { gql, useMutation } from '@apollo/client'
 import { Form, Formik } from 'formik'
 import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 
-const updateUserMutation = gql`
-  mutation UpdateUser($user: UserToUpdate!) {
-    updateUser(user: $user) {
-      _id
-      avatar
+type UsersMutation = Pick<GQL.IMutation, 'updateUsers'> &
+  Pick<GQL.IMutation, 'addUsers'>
+
+const usersMutationGQL = gql`
+  mutation MutateUsers(
+    $addParams: AddUsersParams
+    $updateParams: UpdateUsersParams
+  ) {
+    addUsers(params: $addParams) {
+      addedData {
+        _id
+        name
+        avatar
+      }
     }
-  }
-`
-
-const addUserMutation = gql`
-  mutation UpdateUser($user: UserToAdd!) {
-    addUser(user: $user) {
-      _id
-      avatar
+    updateUsers(params: $updateParams) {
+      updatedData {
+        avatar
+        name
+        _id
+      }
     }
   }
 `
 
 const UserCard = () => {
-  const userStore = useSelector<RootStore, UserStore>(
-    ({ userStore }) => userStore
-  )
+  const userStore = useAppSelector<UserStore>(({ userStore }) => userStore)
 
-  const [user, setUser] = useState<Partial<GQL.IUser>>({ avatar: '' })
   const [animateVariant, setAnimateVariant] =
     useState<ButtonVariants>('default')
 
-  const [updateUser] =
-    useMutation<Pick<GQL.IMutation, 'updateUser'>>(updateUserMutation)
-  const [addUser] = useMutation<Pick<GQL.IMutation, 'addUser'>>(addUserMutation)
+  const [usersMutation] = useMutation<UsersMutation>(usersMutationGQL)
 
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
-  const onUserSubmit = async ({ avatar }: Partial<GQL.IUser>) => {
+  const onUserSubmit = async ({ avatar, name }: Partial<GQL.IUser>) => {
     setAnimateVariant('default')
 
-    let updatedUser: GQL.IUser
+    try {
+      const { data } = await usersMutation({
+        variables: {
+          addParams: {
+            usersToAdd: userStore.user ? undefined : [{ avatar, name }]
+          },
+          updateParams: {
+            usersToUpdate: userStore.user
+              ? [{ avatar, name, _id: userStore.user?._id }]
+              : undefined
+          }
+        }
+      })
 
-    if (user?._id) {
-      const variables: GQL.IUpdateUserOnMutationArguments = {
-        user: { _id: user._id, avatar }
-      }
+      const addedUsers = data.addUsers?.addedData
+      const updatedUsers = data.updateUsers?.updatedData
 
-      const response = await updateUser({ variables })
+      const newUser = userStore.user
+        ? updatedUsers[updatedUsers.length - 1]
+        : addedUsers[addedUsers.length - 1]
 
-      updatedUser = response.data.updateUser
-    } else {
-      const variables: GQL.IAddUserOnMutationArguments = { user: { avatar } }
+      dispatch(User.actions.update({ user: newUser }))
 
-      const response = await addUser({ variables })
-
-      updatedUser = response.data.addUser
-    }
-
-    if (updatedUser) {
-      setUser(updatedUser)
       setAnimateVariant('success')
-    } else setAnimateVariant('failed')
+    } catch (error) {
+      setAnimateVariant('failed')
+    }
   }
 
   useEffect(() => {
-    setUser(userStore.user)
-  }, [userStore])
-
-  useEffect(() => {
-    dispatch(getUserThunk({}))
+    dispatch(getUserThunk({ callOnlyIfNotExists: true }))
   }, [dispatch])
 
   return (
@@ -85,9 +90,15 @@ const UserCard = () => {
       <h2>User</h2>
 
       <Presence condition={!userStore.loading}>
-        <Formik onSubmit={onUserSubmit} initialValues={{ avatar: '' }}>
+        <Formik onSubmit={onUserSubmit} initialValues={userStore.user}>
           <Form>
-            <Text name='avatar' label='Avatar URL' placeholder={user?.avatar} />
+            <Text name='name' label='Nome' placeholder={userStore.user?.name} />
+
+            <Text
+              name='avatar'
+              label='Avatar URL'
+              placeholder={userStore.user?.avatar}
+            />
 
             <Button animateVariant={animateVariant}>Atualizar</Button>
           </Form>

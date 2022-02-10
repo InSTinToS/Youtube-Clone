@@ -1,27 +1,61 @@
-type DeletedCount {
-  deletedCount: Int
+type Category {
+  _id: ID!
+  label: String!
 }
+
+###################################
+
+input CategoriesToAdd {
+  label: String!
+}
+
+input AddCategoriesParams {
+  returnAll: Boolean
+  categoriesToAdd: [CategoriesToAdd!]
+}
+
+type AddCategoriesReturn {
+  all: [Category!]
+  addedData: [Category!]
+}
+
+###################################
 
 input CategoryToUpdate {
   _id: ID!
   label: String!
 }
 
-input CategoryToAdd {
-  label: String!
+input UpdateCategoriesParams {
+  returnAll: Boolean
+  categoriesToUpdate: [CategoryToUpdate!]
 }
 
-type Category {
-  _id: ID!
-  label: String!
+type UpdateCategoriesReturn {
+  all: [Category!]
+  updatedData: [Category!]
 }
+
+###################################
+
+input DeleteCategoriesParams {
+  returnAll: Boolean
+  idsToDelete: [ID!]
+}
+
+type DeleteCategoriesReturn {
+  all: [Category!]
+  deletedData: [Category!]
+}
+
+###################################
 
 type Query {
   categories: [Category!]!
 }
 
 type Mutation {
-  updateCategories(updatedCategories: [CategoryToUpdate!]!): [Category!]
-  addCategories(newCategories: [CategoryToAdd!]!): [Category!]
-  deleteCategories(categoriesToDelete: [CategoryToUpdate!]!): DeletedCount
+  addCategories(params: AddCategoriesParams): AddCategoriesReturn
+  updateCategories(params: UpdateCategoriesParams): UpdateCategoriesReturn
+  deleteCategories(params: DeleteCategoriesParams): DeleteCategoriesReturn
 }

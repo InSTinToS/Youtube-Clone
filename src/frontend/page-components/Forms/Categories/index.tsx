@@ -1,135 +1,116 @@
 import getFormData from 'frontend/utils/getFormValues'
+import getNewValues from 'frontend/utils/getNewValues'
 
-import getCategoriesThunk from 'frontend/store/categories/extraReducers/getCategories'
-import { CategoryStore } from 'frontend/store/categories'
+import getCategoriesThunk from 'frontend/store/categories/extra-reducers/getCategories'
+import Category, { CategoryStore } from 'frontend/store/categories'
+
+import { useAppDispatch, useAppSelector } from 'frontend/hooks/redux'
 
 import Button, { ButtonVariants } from 'frontend/components/Form/Button'
 import ArrayText from 'frontend/components/Form/ArrayText'
 import Presence from 'frontend/components/Presence'
 
-import { RootStore } from 'frontend/types/redux'
-
 import { gql, useMutation } from '@apollo/client'
 import { Form, Formik } from 'formik'
 import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+
+type CategoriesMutation = Pick<GQL.IMutation, 'updateCategories'> &
+  Pick<GQL.IMutation, 'addCategories'> &
+  Pick<GQL.IMutation, 'deleteCategories'>
+
+const categoriesMutationGQL = gql`
+  mutation MutateCategories(
+    $addCategoriesParams: AddCategoriesParams
+    $updateCategoriesParams: UpdateCategoriesParams
+    $deleteCategoriesParams: DeleteCategoriesParams
+  ) {
+    addCategories(params: $addCategoriesParams) {
+      addedData {
+        _id
+        label
+      }
+    }
+    updateCategories(params: $updateCategoriesParams) {
+      updatedData {
+        _id
+        label
+      }
+    }
+    deleteCategories(params: $deleteCategoriesParams) {
+      deletedData {
+        _id
+        label
+      }
+    }
+  }
+`
 
 const arrayTextFields = [{ name: 'label', label: 'Category' }]
 
-const deleteCategoriesQuery = gql`
-  mutation Mutation($categoriesToDelete: [CategoryToUpdate!]!) {
-    deleteCategories(categoriesToDelete: $categoriesToDelete) {
-      deletedCount
-    }
-  }
-`
-
-const updateCategoriesQuery = gql`
-  mutation Mutation($updatedCategories: [CategoryToUpdate!]!) {
-    updateCategories(updatedCategories: $updatedCategories) {
-      _id
-      label
-    }
-  }
-`
-
-const addCategoriesQuery = gql`
-  mutation Mutation($newCategories: [CategoryToAdd!]!) {
-    addCategories(newCategories: $newCategories) {
-      _id
-      label
-    }
-  }
-`
-
-const CategoryCard = () => {
-  const categoriesStore = useSelector<RootStore, CategoryStore>(
+const Categories = () => {
+  const categoriesStore = useAppSelector<CategoryStore>(
     ({ categoriesStore }) => categoriesStore
   )
 
-  const [categories, setCategories] = useState<GQL.ICategory[]>()
   const [animateButton, setAnimateButton] = useState<ButtonVariants>('default')
 
-  const [updateCategories] = useMutation<
-    Pick<GQL.IMutation, 'updateCategories'>
-  >(updateCategoriesQuery)
+  const [categoriesMutation] = useMutation<CategoriesMutation>(
+    categoriesMutationGQL
+  )
 
-  const [addCategories] =
-    useMutation<Pick<GQL.IMutation, 'addCategories'>>(addCategoriesQuery)
-
-  const [deleteCategories] = useMutation<
-    Pick<GQL.IMutation, 'deleteCategories'>
-  >(deleteCategoriesQuery)
-
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
   const onCategorySubmit = async (values: { categories: GQL.ICategory[] }) => {
-    setCategories(undefined)
     setAnimateButton('default')
 
-    let resSuccess: boolean
-    const { dataToCreate, dataToUpdate, dataToRemove } =
-      getFormData<GQL.ICategory>(
-        categoriesStore?.categories,
-        values?.categories
+    const {
+      dataToCreate: categoriesToAdd,
+      dataToUpdate: categoriesToUpdate,
+      idsToDelete
+    } = getFormData<GQL.ICategory>(
+      categoriesStore.categories,
+      values.categories
+    )
+
+    try {
+      const { data } = await categoriesMutation({
+        variables: {
+          deleteCategoriesParams: { idsToDelete },
+          addCategoriesParams: { categoriesToAdd },
+          updateCategoriesParams: { categoriesToUpdate }
+        }
+      })
+
+      const addedValues = data.addCategories?.addedData
+      const updatedValues = data.updateCategories?.updatedData
+      const deletedValues = data.deleteCategories?.deletedData
+
+      const newCategories = getNewValues<GQL.ICategory>(
+        categoriesStore.categories,
+        { addedValues, deletedValues, updatedValues }
       )
 
-    if (dataToRemove?.length > 0) {
-      const variables: GQL.IDeleteCategoriesOnMutationArguments = {
-        categoriesToDelete: dataToRemove
-      }
-
-      const {
-        data: {
-          deleteCategories: { deletedCount }
-        }
-      } = await deleteCategories({ variables })
-
-      resSuccess = !!deletedCount
+      dispatch(Category.actions.update({ categories: newCategories }))
+      setAnimateButton('success')
+    } catch (error) {
+      console.log(error)
+      setAnimateButton('failed')
     }
-
-    if (dataToCreate?.length > 0) {
-      const variables: GQL.IAddCategoriesOnMutationArguments = {
-        newCategories: dataToCreate
-      }
-
-      const {
-        data: { addCategories: addedCategories }
-      } = await addCategories({ variables })
-
-      resSuccess = !!addedCategories
-    }
-
-    if (dataToUpdate?.length > 0) {
-      const variables: GQL.IUpdateCategoriesOnMutationArguments = {
-        updatedCategories: dataToUpdate
-      }
-
-      const {
-        data: { updateCategories: updatedCategories }
-      } = await updateCategories({ variables })
-
-      resSuccess = !!updatedCategories
-    }
-
-    setAnimateButton(resSuccess ? 'success' : 'failed')
-    dispatch(getCategoriesThunk({ callOnlyIfNotExists: false }))
   }
 
   useEffect(() => {
-    setCategories(categoriesStore.categories)
-  }, [categoriesStore.categories])
-
-  useEffect(() => {
-    dispatch(getCategoriesThunk({ callOnlyIfNotExists: false }))
+    dispatch(getCategoriesThunk({ callOnlyIfNotExists: true }))
   }, [dispatch])
 
   return (
     <section>
       <h2>Categories</h2>
 
-      <Presence condition={!!categories}>
-        <Formik onSubmit={onCategorySubmit} initialValues={{ categories }}>
+      <Presence condition={!categoriesStore.loading}>
+        <Formik
+          onSubmit={onCategorySubmit}
+          initialValues={{ categories: categoriesStore.categories }}
+        >
           {({ values }) => (
             <Form>
               <ArrayText
@@ -147,4 +128,4 @@ const CategoryCard = () => {
   )
 }
 
-export default CategoryCard
+export default Categories

@@ -1,11 +1,9 @@
 import DefaultResType from './'
 
-import { ObjectId } from 'mongodb'
-
 interface Channel {
   logo: string
   name: string
-  _id: ObjectId
+  _id: string
 }
 
 export interface REQ_GET_Channel {}
@@ -16,7 +14,7 @@ export interface REQ_PUT_Channel {
   channels: Channel[]
 }
 export interface REQ_DELETE_Channel {
-  channelsIds: ObjectId[]
+  channelsIds: string[]
 }
 
 export interface RES_GET_Channel extends DefaultResType {

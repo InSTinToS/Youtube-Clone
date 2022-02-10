@@ -1,28 +1,68 @@
-input UserToAdd {
+type User {
+  _id: ID!
+  name: String!
   avatar: String!
 }
+
+###################################
+
+input UserToAdd {
+  name: String!
+  avatar: String!
+}
+
+input AddUsersParams {
+  returnAll: Boolean
+  usersToAdd: [UserToAdd!]
+}
+
+type AddUsersReturn {
+  all: [User!]
+  addedData: [User!]
+}
+
+###################################
+
+input UserToUpdate {
+  _id: ID!
+  name: String!
+  avatar: String!
+}
+
+input UpdateUsersParams {
+  returnAll: Boolean
+  usersToUpdate: [UserToUpdate!]
+}
+
+type UpdateUsersReturn {
+  all: [User!]
+  updatedData: [User!]
+}
+
+###################################
 
 input UserToDelete {
   _id: ID!
 }
 
-input UserToUpdate {
-  _id: ID!
-  avatar: String!
+input DeleteUsersParams {
+  returnAll: Boolean
+  idsToDelete: [ID!]
 }
 
-type User {
-  _id: ID!
-  avatar: String!
+type DeleteUsersReturn {
+  all: [User!]
+  deletedData: [User!]
 }
+
+###################################
 
 type Query {
   users: [User]
-  user(_id: ID!): User
 }
 
 type Mutation {
-  addUser(user: UserToAdd!): User
-  updateUser(user: UserToUpdate!): User
-  deleteUser(userId: ID!): User
+  addUsers(params: AddUsersParams): AddUsersReturn
+  updateUsers(params: UpdateUsersParams): UpdateUsersReturn
+  deleteUsers(params: DeleteUsersParams): DeleteUsersReturn
 }

@@ -12,10 +12,11 @@ interface GetUserParams {
 }
 
 const query = gql`
-  query Query {
+  query QueryUser {
     users {
-      _id
       avatar
+      name
+      _id
     }
   }
 `
@@ -30,8 +31,7 @@ const getUserThunk = createAsyncThunk<GQL.IUser, GetUserParams>(
 
       const { data } = await client.query<GQL.IQuery>({ query })
 
-      if (data.users) return data.users[data.users.length - 1]
-      else if (data.user) return data.user
+      return data.users[data.users.length - 1]
     }
 
     return userStore.user

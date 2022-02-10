@@ -1,22 +1,29 @@
-import {
-  addCategories,
-  deleteCategories,
-  getCategories,
-  updateCategories
-} from '../categories'
+import { add, get, remove, update } from 'backend/mongoDB/actions'
 
 import { Resolvers } from '@apollo/client'
 
 const resolvers: Resolvers = {
-  Query: {
-    categories: getCategories
-  },
+  Query: { categories: () => get('categories') },
   Mutation: {
-    addCategories: (_, { newCategories }) => addCategories(newCategories),
-    updateCategories: (_, { updatedCategories }) =>
-      updateCategories(updatedCategories),
-    deleteCategories: (_, { categoriesToDelete }) =>
-      deleteCategories(categoriesToDelete)
+    addCategories: (_, { params }) =>
+      add({
+        collection: 'categories',
+        returnAll: params.returnAll,
+        data: params.categoriesToAdd
+      }),
+    updateCategories: (_, { params }) =>
+      update({
+        collection: 'categories',
+        returnAll: params.returnAll,
+        data: params.categoriesToUpdate,
+        fields: ['label']
+      }),
+    deleteCategories: (_, { params }) =>
+      remove({
+        collection: 'categories',
+        returnAll: params.returnAll,
+        data: params.idsToDelete
+      })
   }
 }
 

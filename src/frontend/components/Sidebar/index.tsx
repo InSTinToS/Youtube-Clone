@@ -1,7 +1,7 @@
 import { Container, Content, Footer, SidebarItem, UlTitle } from './styles'
 import Presence from '../Presence'
 
-import getChannelsThunk from 'frontend/store/channels/extraReducers/getChannels'
+import getChannelsThunk from 'frontend/store/channels/extra-reducers/getChannels'
 import SidebarStore from 'frontend/store/sidebar'
 
 import useWindowDimensions from 'frontend/hooks/useWindowDimensions'

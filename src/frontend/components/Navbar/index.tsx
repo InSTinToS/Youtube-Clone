@@ -11,7 +11,7 @@ import {
 } from './styles'
 
 import { UserStore } from 'frontend/store/user'
-import getUserThunk from 'frontend/store/user/extraReducers/getUser'
+import getUserThunk from 'frontend/store/user/extra-reducers/getUser'
 
 import {
   Bell,

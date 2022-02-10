@@ -10,7 +10,7 @@ import Video, {
   RES_PUT_Video
 } from 'types/routes/video'
 
-import connectToMongoDB from 'backend/db'
+import connectToMongoDB from 'backend/mongoDB'
 
 import { ObjectId } from 'mongodb'
 

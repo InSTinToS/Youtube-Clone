@@ -10,7 +10,7 @@ import Channel, {
   RES_PUT_Channel
 } from 'types/routes/channel'
 
-import connectToMongoDB from 'backend/db'
+import connectToMongoDB from 'backend/mongoDB'
 
 import { ObjectId } from 'mongodb'
 
