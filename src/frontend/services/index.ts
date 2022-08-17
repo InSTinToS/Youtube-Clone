@@ -1,6 +1,8 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
 
-const api = axios.create({ baseURL: 'http://localhost:3000/api' })
+const api = axios.create({
+  baseURL: 'https://youtube-clone-lyart.vercel.app/api'
+})
 
 const get = <Res, Req = undefined>(
   path: string,
