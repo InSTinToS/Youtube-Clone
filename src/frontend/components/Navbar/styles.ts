@@ -1,7 +1,7 @@
 import {
   Hamburger as HamburgerIcon,
   Youtube as YoutubeIcon
-} from 'frontend/assets/icons'
+} from '../../assets/icons'
 
 import styled from 'styled-components'
 
@@ -108,12 +108,12 @@ export const Search = styled.div`
   }
 `
 
-export const Youtube = styled(YoutubeIcon)`
+export const Youtube = styled(YoutubeIcon as any)`
   width: 90px;
   height: 20px;
 `
 
-export const Hamburger = styled(HamburgerIcon)`
+export const Hamburger = styled(HamburgerIcon as any)`
   margin: 0 24px;
 `
 
